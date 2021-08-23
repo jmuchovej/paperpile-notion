@@ -1,62 +1,90 @@
 # Paperpile Notion Integration
 
-This repository provides a simple integration between [Paperpile](https://paperpile.com/) and [Notion](www.notion.so) using the new [Notion API](https://developers.notion.com/). The purpose is to make it easy to periodically sync a list of papers in Paperpile to a Notion database.
+Inspired by [gsarti/paperpile-notion][gsarti]. This is a Python CLI to manually
+sync your articles in Paperpile to a Notion database. Optionally, you may sync
+an authors database as well.
+
+**NOTE:** This will only be maintained if Paperpile doesn't integrate directly
+with Notion. They have expressed interest, [here][forum.paperpile/notion].
+
+[gsarti]: https://github.com/gsarti/paperpile-notion
+[forum.paperpile/notion]: https://forum.paperpile.com/t/suggestion-for-notion-hook/
 
 This is a work in progress, and is currently intended for personal use only (no support, no warranty, no liability, etc.).
 
 ## Installation
 
-Simply clone the repo locally and install the dependencies, preferably in a virtualenv:
+You can `pip` install `paperpile-notion`, **preferably in a virtual environment**.
 
-```shell
-git clone https://github.com/gsarti/paperpile-notion.git
-cd paperpile-notion
-pip install pyyaml notion-database rich
+```bash
+pip install paperpile-notion
 ```
 
 ## Requirements
 
-To run the script, you will need the following things:
+To use `paperpile-notion`, you'll need a few things:
 
-1. A CSV file exported from Paperpile containing the list of papers and their metadata. [data.csv](data.csv) is an example of an exported CSV. For now, this needs to be manually downloaded and moved to this folder since Paperpile does not provide any API for exporting data.
+1. A `JSON` export from Paperpile. You can retrieve this by going to "Settings >
+   Export > Export to JSON".
+1. A configuration file, similar to what you'll find in
+   [`docs/config.yml`][config]. **Currently, we do not support venues, but it is
+   planned.**
+1. Your `Article` database URL, which you can copy directly from your browser.
+1. (**optional**) Your `Author` database URL, copied in a similar way as above.
+1. Your `token_v2` (detailed below) **OR** your email/password (never stored by
+   `paperpile-notion`).
 
-2. A configuration file to map categories, journals and conferences to their acronyms. [config.yaml](config.yaml) is an example of a configuration file containing major AI and NLP conferences and journals.
+**NOTE:** Your `Article` database __must have the following columns:__
 
-3. A database id for the Notion database you want to sync to. To retrieve the database id, follow the directions provided [here](https://developers.notion.com/docs/working-with-databases). The current structure for the database must contain at least the following columns:
+| Name | Type | Description |
+| ---- | ---- | ------------|
+| ID   | `text` | An ID issued by Paperpile which can be used to uniquely identify papers, feel free to hide the column in Notion once created. |
+| Status | `select` | Your reading status. Can be fully customized in your `config.yml`. |
+| Authors | `multi_select` OR `relation` | The paper's authors. If you have an `Author` database, use the `relation` type otherwise a `multi_select`. |
+| URL | `url` | A link to the paper in Paperpile. |
+| Fields | `multi_select` | The [sub-]fields the paper belongs to. |
+| Methods | `multi_select` | The methods/tools used in the paper. |
 
-    - `Item type`  ( `select` ): Corresponds to the `Item type` field in the Paperpile export (e.g. `Conference Paper`, `Journal Article`, etc.).
-
-    - `Title`  ( `title` ): The title of the paper.
-
-    - `Status` ( `select` ): Set to `Done` when the paper was read, empty otherwise. Can take other values. Managed by using a "Read" and a "To Read" folder inside Papepile.
-
-    - `Authors` ( `multi_select` ): The paper's authors. Corresponds to the `Authors` field in the Paperpile export, with only lastnames and first letter of firstnames.
-
-    - `Venues` ( `multi_select` ): The venues in which the paper was published. Based on the config sections for mapping names to acronyms. Multiselect to specify e.g. conference + arXiv.
-
-    - `Date` ( `date` ): The date the paper was published.
-
-    - `Link` ( `url` ): Link to the paper. If multiple links are available, arXiv links are preferred.
-
-    - `Categories` ( `multi_select` ): The categories the paper belongs to. Define the macro-fields to which the paper belongs. These are extracted from the labels that were assigned to the paper on Paperpile.
-
-    - `Methods` ( `multi_select` ): The methods and aspects investigated in the paper. Can be whatever, from architectures (e.g. CNN, Transformer) to sub-topics. On Paperpile, these correspond to labels having the following format: `category_shortname - method_name` (e.g. Probing tasks for interpretability research could be `INT - Probing`). Refer to the CSV file for an example.
-
-4. A Notion API key. To retrieve the API key, follow the directions provided in the [Notion API Getting Started](https://developers.notion.com/docs/getting-started). You will also need to add permission for the integration on the database from the previous point.
+[config]: docs/config.yml
 
 ## Usage
 
-Once everything is in place, simply run the script as:
+As we use `notion-py`, we are limited by their support for either an
+email/password login OR your `TOKEN_V2`. Your `token_v2` may be retrieved from
+your [notion.so][notion] cookies.
 
-```shell
-python update_db.py \
-    --input data.csv \
-    --config config.yaml \
-    --database <YOUR_DB_ID> \
-    --token <YOUR_NOTION_API_KEY>
+1. [Using your `token_v2` (recommended)](#token-v2)
+1. [Using your email/password](#email-pass)
+
+<i id="token-v2"></i>
+### Using your `token_v2` (recommended)
+
+You have two ways to supply your `token_v2` to `paperpile-notion`:
+1. (**preferred**) You may store it in an environment variable called
+   `NOTION_TOKEN_V2`, which will be read by `paperpile-notion`.
+1. **OR** you may pass your token in using the `--token <token_v2>` flag.
+
+```bash
+# Using NOTION_TOKEN_V2
+$ paperpile-notion update-db --refs <YOUR_JSON>.json
+
+# Using --token ...
+$ paperpile-notion --token <token_v2> update-db --refs <YOUR_JSON>.json
 ```
 
-Example output, adding a new paper to the database:
+<i id="email-pass"></i>
+### Using your email/password
+
+You will be prompted each time for your Notion email/password login.
+
+```bash
+paperpile-notion update-db --refs <YOUR_JSON>.json
+```
+
+
+### Example output
+
+When adding, adding a new paper to the database:
 
 ![Console output](img/output.png)
 
