@@ -2,8 +2,9 @@
 name = "paperpile-notion"
 version = "0.1.0"
 description = "Sync Notion with Paperpile"
-authors = ["John M <5000729+jmuchovej@users.noreply.github.com>"]
+authors = ["J Muchovej <5000729+jmuchovej@users.noreply.github.com>"]
 license = "MIT"
+include = ["docs/config.yaml"]
 
 [tool.poetry.scripts]
 paperpile-notion = "paperpile_notion.commands:cli"

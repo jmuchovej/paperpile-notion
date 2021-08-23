@@ -144,6 +144,7 @@ def update_author_db(ctx: click.Context, references: str) -> None:
 @click.pass_context
 def config(ctx: click.Context, edit: bool = True) -> None:
     path = Path(click.get_app_dir("paperpile-notion")) / "config.yaml"
+    default_config = Path(__file__).parent.parent / "docs/config.yaml"
 
     dirs = [Path(), Path(click.get_app_dir("paperpile-notion"))]
     cfgs = ["config.yaml", "config.yml"]
@@ -162,7 +163,7 @@ def config(ctx: click.Context, edit: bool = True) -> None:
     except AssertionError:
         path.parent.mkdir(exist_ok=True)
         click.echo(click.style(f"Copying default configuration to `{path}`."))
-        shutil.copy(str(Path(__file__) / "config.yaml"), str(path))
+        shutil.copy(str(default_config), str(path))
         config = YAML().load(path.open("r", encoding="utf-8"))
 
     if edit:
