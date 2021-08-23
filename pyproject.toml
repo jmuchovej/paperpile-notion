@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "paperpile-notion"
+version = "0.1.0"
+description = "Sync Notion with Paperpile"
+authors = ["John M <5000729+jmuchovej@users.noreply.github.com>"]
+license = "MIT"
+
+[tool.poetry.scripts]
+paperpile-notion = "paperpile_notion.commands:cli"
+
+[tool.poetry.dependencies]
+python = ">=3.7.1,<4.0"
+notion-database = "^20210513.7"
+"ruamel.yaml" = "^0.17.13"
+click = "^8.0.1"
+notion = "^0.0.28"
+pandas = "^1.3.2"
+tqdm = "^4.62.1"
+emojis = "^0.6.0"
+
+[tool.poetry.dev-dependencies]
+black = "^21.7b0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

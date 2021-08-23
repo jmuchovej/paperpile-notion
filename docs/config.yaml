@@ -1,0 +1,35 @@
+blocks:
+  # Head to your `Article` database and copy/paste the URL here (or just the
+  #   part following your workspace name)
+  articles: <your-articles-page-slug>
+  # Head to your `Author` database and copy/paste the URL here (or just the part
+  #   following your workspace name)
+  authors: <your-authors-page-slug>
+
+authors:
+  # If you don't want to maintain an `Author` database, set `rollup` to false.
+  rollup: true
+
+status:
+  # This corresponds to the name exported by Paperpile, unless you want to use
+  #   folders instead of labels, leave this alone.
+  col: "labelsNamed"
+  # Set this to whatever prefix you'd like to designate status. OR you may leave
+  #   it blank.
+  prefix: "status:"
+  # Create as many states as you would like. Provide a valid Notion color, or
+  #   leave it as "default"
+  states:
+    unread: { name: "To Read", color: "red", }
+    read: { name: "Done", color: "green", }
+
+fields-methods:
+  # State how we should split labels to extract `field-method` pairs. TAKE CARE
+  #   TO ENSURE THIS ONLY APPEARS ONCE PER LABEL.
+  delim: " - "
+  fields:
+    # Fields should look like this:
+    # <abbr>: { color: <color>, name: <name> }
+  methods:
+    # Methods should look like this:
+    # <abbr>: { color: <color>, name: <name> }
