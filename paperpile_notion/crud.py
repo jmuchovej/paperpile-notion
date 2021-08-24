@@ -133,4 +133,4 @@ def dispatch(df: pd.DataFrame, fn: Callable, CVs: List, desc: str = "") -> None:
     #             pbar.update(1)
     #             click.echo(" " + " ".join(states) + " ", nl=False)
 
-    click.secho(emojis.encode(":confetti_ball:: Done!"), fg="cyan", blink=True)
+    click.secho(emojis.encode(":confetti_ball: Done!"), fg="cyan", blink=True)
