@@ -5,7 +5,7 @@ description = "Sync Notion with Paperpile"
 authors = ["J Muchovej <5000729+jmuchovej@users.noreply.github.com>"]
 license = "MIT"
 include = ["docs/config.yaml"]
-readme = "README.md
+readme = "README.md"
 repository = "https://github.com/jmuchovej/paperpile-notion"
 
 [tool.poetry.scripts]
