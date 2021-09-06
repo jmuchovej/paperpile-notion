@@ -2,6 +2,10 @@ name: "Sync Paperpile to Notion"
 description: "An unofficial CLI to sync your Paperpile Articles/Authors to Notion."
 author: jmuchovej
 
+branding:
+  icon: book
+  color: blue
+
 inputs:
   references:
     description: "The path to your BibTeX containing the desired entries to sync"
