@@ -73,15 +73,21 @@ def fields_methods(record: Dict, config: Dict) -> Dict:
     keywords = set(record["keyword"])
     delim = config["delim"]
 
-    fields = {k.split(delim)[0] for k in keywords}
-    fields_map  = config["fields" ]
-    fields  = [fields_map[f]  for f in fields ]
-    record["Fields"] = fields
+    try:
+        fields = {k.split(delim)[0] for k in keywords}
+        fields_map  = config["fields" ]
+        fields  = [fields_map[f]  for f in fields ]
+        record["Fields"] = fields
+    except (KeyError, TypeError):
+        record["Fields"] = []
 
-    methods = {k.split(delim)[1] for k in keywords}
-    methods_map = config["methods"]
-    methods = [methods_map[m] for m in methods]
-    record["Methods"] = methods
+    try:
+        methods = {k.split(delim)[1] for k in keywords}
+        methods_map = config["methods"]
+        methods = [methods_map[m] for m in methods]
+        record["Methods"] = methods
+    except (KeyError, TypeError):
+        record["Methods"] = []
 
     record["keyword"] = list(keywords - {k for k in keywords if delim in k})
 
