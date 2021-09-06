@@ -23,7 +23,7 @@ runs:
     - name: "Sync .config with ~/.config"
       shell: bash
       run: |
-        [-d "$(pwd)/.config" ] && rsync -a $(pwd)/.config ${HOME}/
+        [ -d "$(pwd)/.config" ] && rsync -a $(pwd)/.config ${HOME}/
     - name: Run `paperpile-notion`
       shell: bash
       run: >-
