@@ -73,7 +73,6 @@ def _preload_databases(ctx: click.Context, references: click.File) -> None:
 def update_db(ctx: click.Context, references: click.File) -> None:
     """Updates your Author and Article databases."""
     _preload_databases(ctx, references)
-    import ipdb; ipdb.set_trace()
     ctx.invoke(update_author_db, references=references)
     ctx.invoke(update_article_db, references=references)
 
