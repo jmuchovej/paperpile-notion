@@ -26,9 +26,6 @@ runs:
         [ -d "$(pwd)/.config" ] && rsync -a $(pwd)/.config ${HOME}/
     - name: Run `paperpile-notion`
       shell: bash
-      run: >-
-        paperpile-notion
-          -r ${{ inputs.references }}
-          -t ${{ inputs.token }}
-          update-db
+      run: |
+        paperpile-notion -r ${{ inputs.references }} -t ${{ inputs.token }} update-db
 
