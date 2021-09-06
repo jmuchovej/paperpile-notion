@@ -1,0 +1,26 @@
+name: "Sync Paperpile to Notion"
+description: "An unofficial CLI to sync your Paperpile Articles/Authors to Notion."
+author: jmuchovej
+
+inputs:
+  references:
+    description: "The path to your BibTeX containing the desired entries to sync"
+    required: true
+  token:
+    description: "Your Notion Integration Token."
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - id: Install `paperpile-notion`
+      shell: bash
+      run: pip3 install paperpile-notion
+    - id: Run `paperpile-notion`
+      shell: bash
+      run: >-
+        paperpile-notion
+          -r ${{ inputs.references }}
+          -t ${{ inputs.token }}
+          update-db
+
