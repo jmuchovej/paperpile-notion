@@ -17,14 +17,10 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install `paperpile-notion`
+    - id: Install `paperpile-notion`
       shell: bash
       run: pip3 install paperpile-notion
-    - name: Run `paperpile-notion`
+    - id: Run `paperpile-notion`
       shell: bash
-      run: >-
-        paperpile-notion
-          -r ${{ inputs.references }}
-          -t ${{ inputs.token }}
-          update-db
+      run: paperpile-notion -r ${{ inputs.references }} -t ${{ inputs.token }} update-db
 
