@@ -1,10 +1,8 @@
-dbs:
-  # Head to your `Article` database and copy/paste the URL here (or just the
-  #   part following your workspace name)
-  articles: <your-articles-page-slug>
-  # Head to your `Author` database and copy/paste the URL here (or just the part
-  #   following your workspace name)
-  authors: <your-authors-page-slug>
+db:
+  # Write the name of your Articles database here
+  articles: Papers
+  # Write the name of your Authors database here
+  authors: Authors
 
 
 status:
@@ -28,6 +26,7 @@ fields-methods:
     # Methods should look like this:
     # <abbr>: { color: <color>, name: <name> }
 
+# You can feel free to omit this and we won't make use of this.
 bibtex:
   venues:
     book: publisher
