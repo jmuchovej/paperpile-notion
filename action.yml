@@ -20,7 +20,14 @@ runs:
     - name: Install `paperpile-notion`
       shell: bash
       run: pip3 install paperpile-notion
+    - name: "Sync .config with ~/.config"
+      run: |
+        [-d "$(pwd)/.config" ] && rsync -a $(pwd)/.config ${HOME}/.config
     - name: Run `paperpile-notion`
       shell: bash
-      run: paperpile-notion -r ${{ inputs.references }} -t ${{ inputs.token }} update-db
+      run: >-
+        paperpile-notion
+          -r ${{ inputs.references }}
+          -t ${{ inputs.token }}
+          update-db
 
