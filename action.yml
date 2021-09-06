@@ -22,7 +22,7 @@ runs:
       run: pip3 install paperpile-notion
     - name: "Sync .config with ~/.config"
       run: |
-        [-d "$(pwd)/.config" ] && rsync -a $(pwd)/.config ${HOME}/.config
+        [-d "$(pwd)/.config" ] && rsync -a $(pwd)/.config ${HOME}/
     - name: Run `paperpile-notion`
       shell: bash
       run: >-
