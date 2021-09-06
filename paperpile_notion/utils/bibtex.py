@@ -78,7 +78,7 @@ def fields_methods(record: Dict, config: Dict) -> Dict:
         fields_map  = config["fields" ]
         fields  = [fields_map[f]  for f in fields ]
         record["Fields"] = fields
-    except (KeyError, TypeError):
+    except (KeyError, TypeError, IndexError):
         record["Fields"] = []
 
     try:
@@ -86,7 +86,7 @@ def fields_methods(record: Dict, config: Dict) -> Dict:
         methods_map = config["methods"]
         methods = [methods_map[m] for m in methods]
         record["Methods"] = methods
-    except (KeyError, TypeError):
+    except (KeyError, TypeError, IndexError):
         record["Methods"] = []
 
     record["keyword"] = list(keywords - {k for k in keywords if delim in k})
@@ -107,11 +107,7 @@ def customizations(record: Dict, config: Dict) -> Dict:
         partial(venue, config=config["bibtex"]["venues"]),
     ]
 
-    try:
-        assert type(record["keyword"]) == list
-        record["keyword"] = [record["keyword"]]
-    except (AssertionError, KeyError):
-        pass
+    # import ipdb; ipdb.set_trace()
 
     for fn in _customizations_:
         try:

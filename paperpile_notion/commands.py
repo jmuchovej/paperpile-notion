@@ -25,13 +25,21 @@ _token_option_params = {
 @click.group(invoke_without_command=True)
 @click.help_option("-h", "--help")
 @click.option("-t", "--token", "token", **_token_option_params)
-@click.option("-r", "--refs", "references", **_reference_option_params)
 @click.pass_context
-def cli(ctx: Context, token: str, references: click.File) -> None:
-    # TODO support integration tokens, BLOCK NotionClient doesn't support them
+def cli(ctx: Context, token: str) -> None:
     ctx.obj = {}
     ctx.obj["notion"] = notion = Client(auth=token)
     ctx.obj["config"] = config = ctx.invoke(get_config, edit=False)
+
+
+def _preload_databases(ctx: click.Context, references: click.File) -> None:
+    try:
+        assert "articles" not in ctx.obj
+    except AssertionError:
+        return
+
+    notion = ctx.obj["notion"]
+    config = ctx.obj["config"]
 
     try:
         assert "articles" in config["db"]
@@ -55,24 +63,29 @@ def cli(ctx: Context, token: str, references: click.File) -> None:
         click.secho("done.", fg="green", bold=True)
 
     click.secho(f"Reading {references.name} ... ", nl=False)
-    ctx.obj["bibtex"] = from_bib.parse(config, references)
+    ctx.obj["bibtex"] = from_bib.parse(ctx.obj["config"], references)
     click.secho("done.", fg="green", bold=True)
 
 
 @cli.command()
+@click.option("-r", "--refs", "references", **_reference_option_params)
 @click.pass_context
-def update_db(ctx: click.Context) -> None:
+def update_db(ctx: click.Context, references: click.File) -> None:
     """Updates your Author and Article databases."""
-    ctx.invoke(update_author_db)
-    ctx.invoke(update_article_db)
+    _preload_databases(ctx, references)
+    import ipdb; ipdb.set_trace()
+    ctx.invoke(update_author_db, references=references)
+    ctx.invoke(update_article_db, references=references)
 
 
 @cli.command()
+@click.option("-r", "--refs", "references", **_reference_option_params)
 @click.pass_context
-def update_article_db(ctx: click.Context) -> None:
+def update_article_db(ctx: click.Context, references: click.File) -> None:
     """Updates your Article's database, optionally syncing/updating your Author's
     database if specified in your 'config.yaml'.
     """
+    _preload_databases(ctx, references)
     utils.printers.summarize("Articles", ctx.obj["bibtex"].entries, ctx.obj["articles"])
 
     for entry in ctx.obj["bibtex"].entries:
@@ -82,11 +95,14 @@ def update_article_db(ctx: click.Context) -> None:
 
 
 @cli.command()
+@click.option("-r", "--refs", "references", **_reference_option_params)
 @click.pass_context
-def update_author_db(ctx: click.Context) -> None:
+def update_author_db(ctx: click.Context, references: click.File) -> None:
     """Strictly updates the your Author's database in Notion."""
     if not ctx.obj["authors"]:
         return
+
+    _preload_databases(ctx, references)
 
     bibtex_authors = [b["Authors"] for b in ctx.obj["bibtex"].entries]
     bibtex_authors = set(itertools.chain(*bibtex_authors))

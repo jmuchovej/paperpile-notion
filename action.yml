@@ -27,5 +27,5 @@ runs:
     - name: Run `paperpile-notion`
       shell: bash
       run: |
-        paperpile-notion -r ${{ inputs.references }} -t ${{ inputs.token }} update-db
+        paperpile-notion -t ${{ inputs.token }} update-db -r ${{ inputs.references }}
 
