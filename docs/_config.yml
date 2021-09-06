@@ -1,1 +1,8 @@
 theme: jekyll-theme-slate
+plugins:
+  - jemoji
+  - jekyll-default-layout
+  - jekyll-github-metadata
+  - jekyll-optional-frontmatter
+  - jekyll-titles-from-headings
+  - jekyll-relative-links
