@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "paperpile-notion"
-version = "0.2.0"
+version = "0.3.0"
 description = "Sync Notion with Paperpile"
 authors = ["J Muchovej <5000729+jmuchovej@users.noreply.github.com>"]
 license = "MIT"
