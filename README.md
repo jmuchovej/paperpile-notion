@@ -1,8 +1,9 @@
 # Paperpile Notion Integration
 
-Inspired by [gsarti/paperpile-notion][gsarti]. This is a Python CLI to manually
-sync your articles in Paperpile to a Notion database. Optionally, you may sync
-an authors database as well.
+**NOTE:** This is a not an official Paperpile integration.
+
+This is a Python CLI to manually sync your articles in Paperpile to a Notion database.
+Optionally, you may sync an authors database as well.
 
 **NOTE:** This will only be maintained if Paperpile doesn't integrate directly
 with Notion. They have expressed interest, [here][forum.paperpile/notion].
@@ -10,9 +11,16 @@ with Notion. They have expressed interest, [here][forum.paperpile/notion].
 [gsarti]: https://github.com/gsarti/paperpile-notion
 [forum.paperpile/notion]: https://forum.paperpile.com/t/suggestion-for-notion-hook/
 
-This is a work in progress, and is currently intended for personal use only (no support, no warranty, no liability, etc.).
+This is a :construction: work in progress. This isn't production-ready software, so it
+may be contain edge-cases not present in the BibTeX's we have tested. **Please feel
+free to open issues if you encounter any bugs.**
 
-## Installation
+## Usage
+
+The documentation site contains a thorough walk-through to setup a GitHub-based
+sync service which just requires some initial configuration.
+
+## Installation 
 
 You can `pip` install `paperpile-notion`, **preferably in a virtual environment**.
 

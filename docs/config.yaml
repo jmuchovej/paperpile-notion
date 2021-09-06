@@ -1,4 +1,4 @@
-blocks:
+dbs:
   # Head to your `Article` database and copy/paste the URL here (or just the
   #   part following your workspace name)
   articles: <your-articles-page-slug>
@@ -6,14 +6,8 @@ blocks:
   #   following your workspace name)
   authors: <your-authors-page-slug>
 
-authors:
-  # If you don't want to maintain an `Author` database, set `rollup` to false.
-  rollup: true
 
 status:
-  # This corresponds to the name exported by Paperpile, unless you want to use
-  #   folders instead of labels, leave this alone.
-  col: "labelsNamed"
   # Set this to whatever prefix you'd like to designate status. OR you may leave
   #   it blank.
   prefix: "status:"
@@ -33,3 +27,18 @@ fields-methods:
   methods:
     # Methods should look like this:
     # <abbr>: { color: <color>, name: <name> }
+
+bibtex:
+  venues:
+    book: publisher
+    article: journal
+    inproceedings: series
+    conference: series
+    proceedings: series
+
+  icons:
+    book: ":books:"
+    article: ":blue_book:"
+    inproceedings: ":bookmark_tabs:"
+    conference: ":bookmark_tabs:"
+    proceedings: ":bookmark_tabs:"
