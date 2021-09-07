@@ -5,3 +5,7 @@ __pycache__/
 .DS_Store
 .idea/
 .vscode
+poetry.lock
+.envrc
+.secrets
+.actrc
