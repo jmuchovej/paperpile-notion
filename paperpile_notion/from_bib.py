@@ -50,16 +50,14 @@ def create_author(ctx: click.Context, author: str) -> None:
 
 def _get_author_notionID(ctx: click.Context, author: str) -> Dict:
     authors = ctx.obj["authors"]
-    extract = process.extractOne(author, authors.keys(), **_extractOne)
-    while extract is None:
-        try:
-            create_author(ctx, author)
-        except:
-            print(author)
-            print(asdict(Author(author)))
+    try:
+        # Essentially a no-op, so it sidesteps error-handling
+        create_author(ctx, author)
         extract = process.extractOne(author, authors.keys(), **_extractOne)
-
-    return {"id": authors[extract[0]]["notionID"]} 
+        return {"id": authors[extract[0]]["notionID"]}
+    except:  # Too many possible errors
+        # Cut our losses to avoid blowing up the Author database.
+        return None
 
 
 def create_article(ctx: click.Context, entry: Dict) -> None:
@@ -72,6 +70,7 @@ def create_article(ctx: click.Context, entry: Dict) -> None:
     if authors:
         _lookup = partial(_get_author_notionID, ctx=ctx)
         entry["Authors"] = [_lookup(author=author) for author in entry["Authors"]]
+        entry["Authors"] = list(filter(lambda x: type(x) == dict, entry["Authors"]))
 
     l_entry = models.from_props(ctx.obj["articles-cls"], entry)
     kwargs = {"properties": asdict(l_entry)}
