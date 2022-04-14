@@ -46,6 +46,7 @@ To use `paperpile-notion`, you'll need a few things:
 
 | Name | Type | Description |
 | ---- | ---- | ------------|
+| Title   | Name | The title of the paper is used as Notion's default "Name" field for reference in other documents |
 | ID   | `text` | An ID issued by Paperpile which can be used to uniquely identify papers, feel free to hide the column in Notion once created. |
 | Status | `select` | Your reading status. Can be fully customized in your `config.yml`. |
 | Authors | `multi_select` OR `relation` | The paper's authors. If you have an `Author` database, use the `relation` type otherwise a `multi_select`. |
