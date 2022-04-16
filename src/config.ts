@@ -11,19 +11,19 @@ export type ArticlesDB = {
 
 export interface ConfigInterface {
   databases: {
-    authors: string | AuthorsDB | undefined,
-    articles: string | ArticlesDB,
+    authors: AuthorsDB | string | undefined,
+    articles: ArticlesDB | string,
   },
   status: {
-    prefix: string | "status:",
-    colname: string | "Status",
+    prefix: string,
+    colname: string,
     states: {
       [key: string]: string,
     }
   },
   topics: {
-    prefix: string | "topic:",
-    colname: string | "Topics",
+    prefix: string,
+    colname: string,
     topics: {
       [key: string]: string,
     }
@@ -36,8 +36,8 @@ export interface ConfigInterface {
     }
   },
   methods: {
-    prefix: string | "method:",
-    colname: string | "Methods",
+    prefix: string,
+    colname: string,
     methods: {
       [key: string]: string,
     }
@@ -55,14 +55,21 @@ export class Config implements ConfigInterface {
   readonly methods: ConfigInterface["methods"]
   readonly icons: ConfigInterface["icons"]
 
-  constructor({databases, status, topics, fields, methods, icons}: ConfigInterface) {
+  constructor({
+                databases,
+                status,
+                topics,
+                fields,
+                methods,
+                icons
+              }: ConfigInterface) {
     this.databases = databases
     const {authors, articles} = databases;
 
     if (!_.isNil(authors) && _.isString(authors)) {
       this.databases.authors = {
         databaseID: authors as string,
-        articleRef: "Papers",
+        articleRef: "Articles",
       }
     }
 
@@ -92,7 +99,11 @@ export class Config implements ConfigInterface {
     this.icons = icons
   }
 
-  get hasAuthorsDB() {
+  get hasAuthorDB() {
     return !_.isNil(this.databases.authors)
+  }
+
+  get authorType() {
+    return this.hasAuthorDB ? "relation" : "multi_select"
   }
 }

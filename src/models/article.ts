@@ -1,14 +1,11 @@
 /* eslint-disable camelcase */
 import {
   CMSPage,
-  getChildBlocks,
   getPageTitle,
   getPropertyValue,
   PageWithChildren,
   richTextAsPlainText,
-  Block, CMS,
 } from "@jitl/notion-api"
-import assert = require("node:assert");
 import {
   Database,
   makeMultiSelect,
@@ -26,10 +23,9 @@ import {
   URL,
 } from "../notion"
 import * as path from "node:path"
-import {BlockList} from "node:net"
-import {GetDatabaseResponse} from "@notionhq/client/build/src/api-endpoints"
 import * as _ from "lodash"
-import {AuthorIndex, AuthorsDatabase} from "./author";
+import {AuthorIndex} from "./author";
+import {ConfigInterface} from "../config";
 
 export class ArticlesDatabase extends Database<ArticleFrontmatter> {
   constructor(id: string, cacheDir: string) {
@@ -100,11 +96,11 @@ type NotionEntry = {
 }
 
 export const BibTeXToNotion = (bib: ArticleEntry) => {
-  const ID = makeRichText(bib["citation-label"])
+  const ID = makeRichText(bib.id) as RichText
   const Title = makeTitle(bib.title)
-  const Status = makeSelect(bib.status || "❓ Unknown")
+  const Status = makeSelect(bib.status) ?? makeSelect("❓ Unknown")
 
-  const Authors = makeMultiSelect(bib.authors) || makeRelation(bib.authors)
+  const Authors = makeRelation(bib.authors) ?? makeMultiSelect(bib.authors)
   const Topics = makeMultiSelect(bib.topics)
   const Fields = makeMultiSelect(bib.fields)
   const Methods = makeMultiSelect(bib.methods)
@@ -113,7 +109,9 @@ export const BibTeXToNotion = (bib: ArticleEntry) => {
   const Venue = makeSelect(bib["container-title"])
   const URL = makeURL(bib.url)
 
-  if (!ID || !Title || !Status) {
+  if (!(ID && Title && Status)) {
+    console.log(bib.id, bib.title, bib.status)
+    console.log(bib, ID, Title, Status)
     return
   }
 
@@ -126,6 +124,7 @@ export const BibTeXToNotion = (bib: ArticleEntry) => {
   Entry = Folders ? {...Entry, Folders} : Entry
   Entry = Venue ? {...Entry, Venue} : Entry
   Entry = URL ? {...Entry, URL} : Entry
+  // console.log(Entry)
 
   return Entry
 }
@@ -138,9 +137,10 @@ export const initArticleDB = async (articleDbID: string, cacheDir: string) => {
   return {db: articles, notion}
 }
 
-export const prepareBibTeXForNotion = (bibEntry: any, authorIndex: AuthorIndex, Config: any) => {
-  bibEntry.status = _.isNil(bibEntry.status) ? undefined : Config.status.states[bibEntry.status]
-  if (Config.authorsDB && !_.isNil(bibEntry.authors)) {
+export const prepareBibTeXForNotion = (bibEntry: any, authorIndex: AuthorIndex, config: ConfigInterface) => {
+  bibEntry.status = _.isNil(bibEntry.status) ? undefined : config.status.states[bibEntry.status]
+
+  if (config.databases.authors && !_.isNil(bibEntry.authors)) {
     bibEntry.authors = bibEntry.authors?.map((author: string) => {
       try {
         return {id: authorIndex[author].frontmatter.pageID}
@@ -150,5 +150,6 @@ export const prepareBibTeXForNotion = (bibEntry: any, authorIndex: AuthorIndex, 
     })
   }
   bibEntry.authors = bibEntry.authors?.filter((a: any) => a)
+
   return bibEntry
 }

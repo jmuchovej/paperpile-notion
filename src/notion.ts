@@ -9,13 +9,15 @@ import {
 } from "@jitl/notion-api"
 import * as _ from "lodash"
 import {GetDatabaseResponse} from "@notionhq/client/build/src/api-endpoints"
-import assert from "node:assert"
 import {APIErrorCode, APIResponseError} from "@notionhq/client";
-import {ArticleFrontmatter} from "./models/article";
-import { AuthorFrontmatter } from "./models/author";
+import {performance} from "perf_hooks";
 
+// TODO do a better job at supporting legacy ENV vars and a --token flag
 const token = process.env.NOTION_INTEGRATION_TOKEN
-export const Notion = new NotionClient({auth: token, logger: NotionClientDebugLogger})
+export const Notion = new NotionClient({
+  auth: token,
+  logger: NotionClientDebugLogger
+})
 
 export interface EntryList<T> {
   [key: string]: {
@@ -38,7 +40,6 @@ export class Database<T> {
   private readonly id: string
   private readonly cms: CMS<T>
   private DB: GetDatabaseResponse | undefined
-  private properties: any
 
   constructor(CMSConfig: any, id: string, cacheDir: string) {
     this.id = id
@@ -55,22 +56,15 @@ export class Database<T> {
     })
   }
 
-  getDB = () => {
-    return this.DB
-  }
-
-  getProperties = () => {
-    assert(this.DB)
-    this.properties = this.DB.properties
-    return this.properties
-  }
-
   downloadDB = async (pkey: string, limit = -1) => {
     let db: EntryList<Author | Article> = {}
 
     const startTime = performance.now()
 
-    const iterable = iteratePaginatedAPI(Notion.databases.query, {database_id: this.id, page_size: 100})
+    const iterable = iteratePaginatedAPI(Notion.databases.query, {
+      database_id: this.id,
+      page_size: 100
+    })
     const asArray = await asyncIterableToArray(iterable)
     const totalTime = performance.now() - startTime
 
@@ -79,13 +73,14 @@ export class Database<T> {
 
     const entries = limit > 0 ? _.slice(asArray, 0, limit) : asArray
 
-    for await (const entry of entries) {
+    for (const entry of entries) {
       // TODO resolve typing error on CMSFrontmatter
       // @ts-ignore
       const frontmatter = this.cms.config.getFrontmatter(entry, this.cms, {})
 
       // @ts-ignore
-      const ID = frontmatter.plain[pkey as string]
+      const ID = frontmatter.plain[pkey as string].trim()
+      if (ID === "") continue
 
       const tmp = _.get(db, ID, [])
       db[ID] = [...tmp, {entry, frontmatter}]
@@ -104,7 +99,7 @@ export const batchEntries = async (entries: any[], toNotion: Function) => {
   for await (const batch of chunks) {
     await Promise.all(_.map(batch, async entry => {
       try {
-        await toNotion(entry)
+        return await toNotion(entry)
       } catch (error: unknown) {
         if (APIResponseError.isAPIResponseError(error)) {
           switch (error.code) {
@@ -113,6 +108,13 @@ export const batchEntries = async (entries: any[], toNotion: Function) => {
               break;
             case APIErrorCode.Unauthorized:
               break;
+            case APIErrorCode.ValidationError:
+              console.error("Validation Failed:")
+              console.log(error.body)
+              break;
+            default:
+              console.log(error)
+              break
           }
         }
       }
@@ -124,7 +126,7 @@ export const batchEntries = async (entries: any[], toNotion: Function) => {
 
 export const createEntries = async (entries: any[], toNotion: Function, dbID: string) => {
   return await batchEntries(entries, async (entry: any) => {
-    await Notion.pages.create({
+    const response = await Notion.pages.create({
       parent: {database_id: dbID},
       properties: toNotion(entry)
     })
@@ -133,7 +135,7 @@ export const createEntries = async (entries: any[], toNotion: Function, dbID: st
 
 export const updateEntries = async (entries: any[], toNotion: Function) => {
   return await batchEntries(entries, async (entry: any) => {
-    await Notion.pages.update({
+    const response = await Notion.pages.update({
       page_id: entry.pageID,
       properties: toNotion(entry)
     })
@@ -164,6 +166,14 @@ export const removeEmptyRelationOrMultiSelects = async (database_id: string, fie
   }
 }
 
+export const diff = (local: any[], notion: any[]) => {
+  const toCreate = _.difference(local, notion).filter(a => a)
+  console.log(`Creating... ${toCreate.length}`)
+  const toUpdate = _.intersection(local, notion).filter(a => a)
+  console.log(`Updating... ${toUpdate.length}`)
+  return {toCreate, toUpdate}
+}
+
 export type MultiSelect = {
   multi_select: { name: string }[]
 }
@@ -171,7 +181,7 @@ export type Relation = {
   relation: { id: string }[]
 }
 export type RichText = {
-  rich_text: { type: "rich_text", text: { content: string } }[]
+  rich_text: { type: "text", text: { content: string } }[]
 }
 export type Title = {
   title: { type: "text", text: { content: string } }[],
@@ -184,19 +194,19 @@ export type URL = {
 }
 
 export const makeTitle = (content: string): Title => {
-  return {title: [{type: "text", text: {content}}]}
+  return {title: [{type: "text", text: {content: content.trim()}}]}
 }
 
 export const makeRichText = (content: string): RichText | undefined => {
-  if (!_.isNil(content) && !_.isEmpty(content)) {
+  if (_.isNil(content) || _.isEmpty(content)) {
     return
   }
 
-  return {rich_text: [{type: "rich_text", text: {content}}]}
+  return {rich_text: [{type: "text", text: {content: content.trim()}}]}
 }
 
 export const makeSelect = (option: string): Select | undefined => {
-  if (!_.isNil(option) && !_.isEmpty(option)) {
+  if (_.isNil(option) || _.isEmpty(option)) {
     return
   }
 
@@ -204,6 +214,11 @@ export const makeSelect = (option: string): Select | undefined => {
 }
 
 export const makeMultiSelect = (options: string[]): MultiSelect | undefined => {
+  if (_.isNil(options) || _.isEmpty(options) || !_.isString(options[0])) {
+    return
+  }
+  options = options.filter(a => a)
+
   if (_.isNil(options) || _.isEmpty(options) || !_.isString(options[0])) {
     return
   }

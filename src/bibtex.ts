@@ -1,5 +1,5 @@
 require(`@citation-js/plugin-bibtex`)
-const {Cite, plugins, inputs} = require(`@citation-js/core`)
+const {Cite} = require(`@citation-js/core`)
 import * as _ from "lodash"
 import {readFileSync} from "node:fs"
 
@@ -10,7 +10,7 @@ const parseKeywords = (keywords: string[] | undefined) => {
   }
 
   let status = _.find(keywords, (k: string) => k.startsWith(`status:`))
-  keywords = keywords.filter((k: string) => k != status)
+  keywords = keywords.filter((k: string) => k.startsWith("status:"))
   status = status?.replace(/status:/, ``)
 
   let topics = keywords.filter((k: string) => k.startsWith(`topic:`))
@@ -44,14 +44,20 @@ export const readBibTeX = (path: string) => {
     citation.keyword = citation.keyword?.split(";").map((x: string) => x.trim())
     citation = {...citation, ...parseKeywords(citation.keyword)}
     citation.authors = citation.author?.map(({family, given}: any) => {
-      return [given, family].filter(e => e).join(" ").replaceAll(".", "")
+      return [given, family].filter(e => e).join(" ").replaceAll(/[.*]/g, "")
     })
 
     // Notion doesn't allow Selects to be longer than 100 characters
-    citation["container-title"] = truncate(citation["container-title"], 100)
+    let venue = citation["container-title"]
+    venue = truncate(venue, 100)
+    venue = venue?.replaceAll(",", " ")
+    citation["container-title"] = venue
 
-    // @ts-ignore
-    obj[citation["citation-label"]] = citation
+    const ID = citation["citation-label"]
+    if (!_.isNil(citation.title) && !_.isNil(citation["citation-label"])) {
+      obj[ID] = citation
+    }
+
     return obj
   }, entries)
 }
