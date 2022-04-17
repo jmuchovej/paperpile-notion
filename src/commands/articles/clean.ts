@@ -1,11 +1,15 @@
 import {removeEmptyRelationOrMultiSelects} from "../../notion";
 import {ArticlesDB} from "../../config";
-import BaseCommand from '../../base';
+import BaseCommand, {BaseArgTypes, BaseFlagTypes} from '../../base';
 
 export default class ArticlesClean extends BaseCommand {
   static summary: string = `Cleans up your Articles Database.`
 
   static description: string = `1. Removes dangling articles without authors.`
+
+  static args: BaseArgTypes = BaseCommand.args;
+  static flags: BaseFlagTypes = BaseCommand.flags;
+  static examples: string[] = BaseCommand.examples;
 
   public async run(): Promise<void> {
     await this.parse(ArticlesClean)

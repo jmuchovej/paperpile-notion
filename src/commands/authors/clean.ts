@@ -1,17 +1,20 @@
 import {
   asyncIterableToArray,
-  getPageTitle, getPropertyValue,
-  iteratePaginatedAPI, richTextAsPlainText
+  getPageTitle,
+  getPropertyValue,
+  iteratePaginatedAPI,
+  richTextAsPlainText
 } from "@jitl/notion-api"
 import {
   batchEntries,
   makeRelation,
-  Notion, Relation,
+  Notion,
+  Relation,
   removeEmptyRelationOrMultiSelects
 } from "../../notion"
 import * as _ from "lodash"
 import {AuthorsDB} from "../../config";
-import BaseCommand from '../../base';
+import BaseCommand, {BaseArgTypes, BaseFlagTypes} from '../../base';
 
 export default class AuthorsClean extends BaseCommand {
   static summary: string = `Cleans up your Authors Database.`
@@ -19,6 +22,10 @@ export default class AuthorsClean extends BaseCommand {
   static description: string = `
   1. Removes dangling authors with no articles.
   2. Attempts to clean up and merge authors and aliases.`
+
+  static args: BaseArgTypes = BaseCommand.args;
+  static flags: BaseFlagTypes = BaseCommand.flags;
+  static examples: string[] = BaseCommand.examples;
 
   public async run(): Promise<void> {
     await this.parse(AuthorsClean)

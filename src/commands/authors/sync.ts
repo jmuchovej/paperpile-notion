@@ -6,11 +6,15 @@ import {
   prepareAuthorsForNotion
 } from "../../models/author"
 import {AuthorsDB} from "../../config"
-import BaseCommand from '../../base';
+import BaseCommand, {BaseArgTypes, BaseFlagTypes} from '../../base';
 
 export default class AuthorsSync extends BaseCommand {
   static summary: string = `Syncs your Authors Database with the local BibTeX file.`
   static description: string = `Authors will be created if not present (or if they don't match a manually entered alias). Otherwise, Authors will have their name stripped of whitespace and articles consolidation based on matching Aliases.`
+
+  static args: BaseArgTypes = BaseCommand.args;
+  static flags: BaseFlagTypes = BaseCommand.flags;
+  static examples: string[] = BaseCommand.examples;
 
   public async run(): Promise<void> {
     await this.parse(AuthorsSync)

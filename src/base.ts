@@ -4,14 +4,20 @@ import path from "node:path";
 import {Input} from "@oclif/core/lib/interfaces";
 import {BibTeXDB, readBibTeX} from "./bibtex";
 import _ from "lodash";
-import {NotionClient} from "@jitl/notion-api";
+import {NotionClient, NotionClientDebugLogger} from "@jitl/notion-api";
 
 const baseFlags = {
   config: Flags.string({
     char: `c`,
     description: `Path to your config file, if not in <%= config.configDir %>/config.js.`,
   }),
-  help: Flags.help({char: "h"})
+  help: Flags.help({char: `h`}),
+  token: Flags.string({
+    char: `t`,
+    env: `NOTION_INTEGRATION_TOKEN`,
+    description: `Your Notion Integration's Token.`,
+    required: true,
+  })
 }
 export type BaseFlagTypes = typeof baseFlags
 
@@ -25,14 +31,17 @@ export type BaseArgTypes = typeof baseArgs
 
 const loadConfig = async (
   configDir: string,
-  configPath: string | undefined
+  configPath: string | undefined,
+  notion: NotionClient,
 ): Promise<Config> => {
   configPath = configPath ?
     path.join(process.cwd(), configPath) :
     path.join(configDir, "config.js")
 
   const {default: obj} = await import(configPath)
-  return new Config(obj);
+  const config: Config = new Config(obj, notion);
+  await config.setupDBs()
+  return config
 }
 
 abstract class BaseCommand extends Command {
@@ -47,6 +56,7 @@ abstract class BaseCommand extends Command {
   protected appConfig!: Config;
   protected BibTeX!: BibTeXDB
   protected BibTeXAuthors!: string[]
+  protected notion!: NotionClient
 
   // Solved from: https://github.com/oclif/oclif/issues/225#issuecomment-574484114
   async init(): Promise<void> {
@@ -54,7 +64,12 @@ abstract class BaseCommand extends Command {
       this.constructor as Input<any>
     )
 
-    this.appConfig = await loadConfig(this.config.configDir, flags?.config)
+    this.notion = new NotionClient({
+      auth: flags.token,
+      logger: NotionClientDebugLogger,
+    })
+
+    this.appConfig = await loadConfig(this.config.configDir, flags?.config, this.notion)
 
     this.BibTeX = readBibTeX(args.bibtexPath)
     this.BibTeXAuthors = _.chain(this.BibTeX).values().flatMap((o) => o.authors).uniq().filter().value()

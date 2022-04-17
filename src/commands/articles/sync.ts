@@ -1,6 +1,5 @@
-import * as _ from "lodash"
+import _ from "lodash"
 import {BibTeXForNotion} from "../../bibtex";
-
 import {
   BibTeXToNotion,
   initArticleDB,
@@ -9,12 +8,16 @@ import {
 import {initAuthorDB} from "../../models/author"
 import {createEntries, diff, updateEntries} from "../../notion"
 import {ArticlesDB, AuthorsDB} from "../../config";
-import BaseCommand from '../../base';
+import BaseCommand, {BaseArgTypes, BaseFlagTypes} from '../../base';
 
 export default class ArticlesSync extends BaseCommand {
   static summary: string = `Syncs your Articles Database with the local BibTeX file.`
 
   static description: string = `Strictly creates or updates articles based on the ID assigned by Paperpile.`
+
+  static args: BaseArgTypes = BaseCommand.args;
+  static flags: BaseFlagTypes = BaseCommand.flags;
+  static examples: string[] = BaseCommand.examples;
 
   public async run(): Promise<void> {
     await this.parse(ArticlesSync)

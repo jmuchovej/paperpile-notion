@@ -88,7 +88,6 @@ Prior to using `paperpile-notion`, you'll need to setup a few things:
 # 🛠 Commands
 
 <!-- commands -->
-
 * [`paperpile-notion articles:clean BIBTEXPATH`](#paperpile-notion-articlesclean-bibtexpath)
 * [`paperpile-notion articles:sync BIBTEXPATH`](#paperpile-notion-articlessync-bibtexpath)
 * [`paperpile-notion authors:clean BIBTEXPATH`](#paperpile-notion-authorsclean-bibtexpath)
@@ -117,8 +116,7 @@ EXAMPLES
   $ paperpile-notion articles:clean /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See
-code: [dist/commands/articles/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.2/dist/commands/articles/clean.ts)_
+_See code: [dist/commands/articles/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.3/dist/commands/articles/clean.ts)_
 
 ## `paperpile-notion articles:sync BIBTEXPATH`
 
@@ -143,8 +141,7 @@ EXAMPLES
   $ paperpile-notion articles:sync /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See
-code: [dist/commands/articles/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.2/dist/commands/articles/sync.ts)_
+_See code: [dist/commands/articles/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.3/dist/commands/articles/sync.ts)_
 
 ## `paperpile-notion authors:clean BIBTEXPATH`
 
@@ -171,8 +168,7 @@ EXAMPLES
   $ paperpile-notion authors:clean /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See
-code: [dist/commands/authors/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.2/dist/commands/authors/clean.ts)_
+_See code: [dist/commands/authors/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.3/dist/commands/authors/clean.ts)_
 
 ## `paperpile-notion authors:sync BIBTEXPATH`
 
@@ -198,6 +194,5 @@ EXAMPLES
   $ paperpile-notion authors:sync /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See
-code: [dist/commands/authors/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.2/dist/commands/authors/sync.ts)_
+_See code: [dist/commands/authors/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.3/dist/commands/authors/sync.ts)_
 <!-- commandsstop -->
