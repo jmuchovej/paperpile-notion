@@ -99,11 +99,12 @@ Cleans up your Articles Database.
 
 ```
 USAGE
-  $ paperpile-notion articles:clean [BIBTEXPATH] [-c <value>] [-h]
+  $ paperpile-notion articles:clean [BIBTEXPATH] -t <value> [-c <value>] [-h]
 
 FLAGS
   -c, --config=<value>  Path to your config file, if not in /Users/jmuchovej/.config/paperpile-notion/config.js.
   -h, --help            Show CLI help.
+  -t, --token=<value>   (required) Your Notion Integration's Token.
 
 DESCRIPTION
   Cleans up your Articles Database.
@@ -116,7 +117,7 @@ EXAMPLES
   $ paperpile-notion articles:clean /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See code: [dist/commands/articles/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.3/dist/commands/articles/clean.ts)_
+_See code: [dist/commands/articles/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.1.0/dist/commands/articles/clean.ts)_
 
 ## `paperpile-notion articles:sync BIBTEXPATH`
 
@@ -124,11 +125,12 @@ Syncs your Articles Database with the local BibTeX file.
 
 ```
 USAGE
-  $ paperpile-notion articles:sync [BIBTEXPATH] [-c <value>] [-h]
+  $ paperpile-notion articles:sync [BIBTEXPATH] -t <value> [-c <value>] [-h]
 
 FLAGS
   -c, --config=<value>  Path to your config file, if not in /Users/jmuchovej/.config/paperpile-notion/config.js.
   -h, --help            Show CLI help.
+  -t, --token=<value>   (required) Your Notion Integration's Token.
 
 DESCRIPTION
   Syncs your Articles Database with the local BibTeX file.
@@ -141,7 +143,7 @@ EXAMPLES
   $ paperpile-notion articles:sync /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See code: [dist/commands/articles/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.3/dist/commands/articles/sync.ts)_
+_See code: [dist/commands/articles/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.1.0/dist/commands/articles/sync.ts)_
 
 ## `paperpile-notion authors:clean BIBTEXPATH`
 
@@ -149,11 +151,12 @@ Cleans up your Authors Database.
 
 ```
 USAGE
-  $ paperpile-notion authors:clean [BIBTEXPATH] [-c <value>] [-h]
+  $ paperpile-notion authors:clean [BIBTEXPATH] -t <value> [-c <value>] [-h]
 
 FLAGS
   -c, --config=<value>  Path to your config file, if not in /Users/jmuchovej/.config/paperpile-notion/config.js.
   -h, --help            Show CLI help.
+  -t, --token=<value>   (required) Your Notion Integration's Token.
 
 DESCRIPTION
   Cleans up your Authors Database.
@@ -168,7 +171,7 @@ EXAMPLES
   $ paperpile-notion authors:clean /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See code: [dist/commands/authors/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.3/dist/commands/authors/clean.ts)_
+_See code: [dist/commands/authors/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.1.0/dist/commands/authors/clean.ts)_
 
 ## `paperpile-notion authors:sync BIBTEXPATH`
 
@@ -176,11 +179,12 @@ Syncs your Authors Database with the local BibTeX file.
 
 ```
 USAGE
-  $ paperpile-notion authors:sync [BIBTEXPATH] [-c <value>] [-h]
+  $ paperpile-notion authors:sync [BIBTEXPATH] -t <value> [-c <value>] [-h]
 
 FLAGS
   -c, --config=<value>  Path to your config file, if not in /Users/jmuchovej/.config/paperpile-notion/config.js.
   -h, --help            Show CLI help.
+  -t, --token=<value>   (required) Your Notion Integration's Token.
 
 DESCRIPTION
   Syncs your Authors Database with the local BibTeX file.
@@ -194,5 +198,5 @@ EXAMPLES
   $ paperpile-notion authors:sync /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See code: [dist/commands/authors/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.3/dist/commands/authors/sync.ts)_
+_See code: [dist/commands/authors/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.1.0/dist/commands/authors/sync.ts)_
 <!-- commandsstop -->
