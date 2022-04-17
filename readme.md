@@ -9,7 +9,7 @@ database. Optionally, you may sync an authors database as well.
 their own integration with Notion. They have expressed interest,
 [here][forum.paperpile/notion].
 
-forum.paperpile/notion]: https://forum.paperpile.com/t/suggestion-for-notion-hook/
+[forum.paperpile/notion]: https://forum.paperpile.com/t/suggestion-for-notion-hook/
 
 🚧 Overall, this is project is still a work in progress. This shouldn't be used
 as
@@ -31,7 +31,7 @@ TypeScript, obviously, breaks compatability with the Python implementation.
   * [Manually](#manually)
 * [Commands](#commands)
 
-## Initial Setup
+# 🏗 Initial Setup
 
 <!-- initial-setup -->
 
@@ -55,11 +55,11 @@ Prior to using `paperpile-notion`, you'll need to setup a few things:
 
 [config]: docs/paperpile-notion.config.js
 
-<!-- /initial-setup -->
+<!-- initial-setup-stop -->
 
-## Usage
+# 🏗 Usage
 
-### [Recommended] Automatically (via GitHub Workflows)
+## [Recommended] Automatically (via GitHub Workflows)
 
 1. Use the template laid out in [Sync your Paperpile to Notion][sync-repo]
 2. Create a new repository secret named `NOTION_INTEGRATION_TOKEN` by
@@ -70,7 +70,7 @@ Prior to using `paperpile-notion`, you'll need to setup a few things:
 
 [secrets]: https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository
 
-### Manually
+## Manually
 
 1. Globally install `@jmuchovej/paperpile-notion`. (You should globally install
    so that you can access the CLI as a program.) **You do not need `sudo` access
@@ -85,7 +85,7 @@ Prior to using `paperpile-notion`, you'll need to setup a few things:
 3. Run the sequence of commands that will perform your desired sync state. (To
    learn more, check out the [commands](#commands) detailed below.)
 
-# Commands
+# 🛠 Commands
 
 <!-- commands -->
 
@@ -201,97 +201,3 @@ EXAMPLES
 _See
 code: [dist/commands/authors/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.2/dist/commands/authors/sync.ts)_
 <!-- commandsstop -->
-
-* [`paperpile-notion articles:clean`](#paperpile-notion-articlesclean)
-* [`paperpile-notion articles:sync`](#paperpile-notion-articlessync)
-* [`paperpile-notion authors:clean`](#paperpile-notion-authorsclean)
-* [`paperpile-notion authors:sync`](#paperpile-notion-authorssync)
-* [`paperpile-notion help [COMMAND]`](#paperpile-notion-help-command)
-
-## `paperpile-notion articles:clean`
-
-describe the command here
-
-```
-USAGE
-  $ paperpile-notion articles:clean -c <value> -f <value>
-
-FLAGS
-  -c, --config=<value>  (required) Path to your config file
-  -f, --bibtex=<value>  (required) BibTeX file to update Notion from
-
-DESCRIPTION
-  describe the command here
-
-EXAMPLES
-  $ paperpile-notion articles:clean
-```
-
-_See
-code: [dist/commands/articles/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.0/dist/commands/articles/clean.ts)_
-
-## `paperpile-notion articles:sync`
-
-describe the command here
-
-```
-USAGE
-  $ paperpile-notion articles:sync -c <value> -f <value>
-
-FLAGS
-  -c, --config=<value>  (required) Path to your config file
-  -f, --bibtex=<value>  (required) BibTeX file to update Notion from
-
-DESCRIPTION
-  describe the command here
-
-EXAMPLES
-  $ paperpile-notion articles:sync
-```
-
-_See
-code: [dist/commands/articles/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.0/dist/commands/articles/sync.ts)_
-
-## `paperpile-notion authors:clean`
-
-describe the command here
-
-```
-USAGE
-  $ paperpile-notion authors:clean -c <value> -f <value>
-
-FLAGS
-  -c, --config=<value>  (required) Path to your config file
-  -f, --bibtex=<value>  (required) BibTeX file to update Notion from
-
-DESCRIPTION
-  describe the command here
-
-EXAMPLES
-  $ paperpile-notion authors:clean
-```
-
-_See
-code: [dist/commands/authors/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.0/dist/commands/authors/clean.ts)_
-
-## `paperpile-notion authors:sync`
-
-describe the command here
-
-```
-USAGE
-  $ paperpile-notion authors:sync -c <value> -f <value>
-
-FLAGS
-  -c, --config=<value>  (required) Path to your config file
-  -f, --bibtex=<value>  (required) BibTeX file to update Notion from
-
-DESCRIPTION
-  describe the command here
-
-EXAMPLES
-  $ paperpile-notion authors:sync
-```
-
-_See
-code: [dist/commands/authors/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.0/dist/commands/authors/sync.ts)_
