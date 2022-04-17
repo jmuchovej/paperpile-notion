@@ -57,7 +57,7 @@ Prior to using `paperpile-notion`, you'll need to setup a few things:
 
 <!-- initial-setup-stop -->
 
-# 🏗 Usage
+# 🧑‍💻Usage
 
 ## [Recommended] Automatically (via GitHub Workflows)
 
