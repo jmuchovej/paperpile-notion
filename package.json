@@ -25,8 +25,6 @@
     "@jitl/notion-api": "^0.1.2",
     "@notionhq/client": "^1.0.4",
     "@oclif/core": "^1.7.0",
-    "@oclif/plugin-help": "^5",
-    "@oclif/plugin-plugins": "^2.0.1",
     "@types/lodash": "^4.14.180",
     "lodash": "^4.17.21",
     "string-similarity": "^4.0.4"
