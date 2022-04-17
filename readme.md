@@ -9,6 +9,8 @@ database. Optionally, you may sync an authors database as well.
 their own integration with Notion. They have expressed interest,
 [here][forum.paperpile/notion].
 
+forum.paperpile/notion]: https://forum.paperpile.com/t/suggestion-for-notion-hook/
+
 🚧 Overall, this is project is still a work in progress. This shouldn't be used
 as
 production-ready software, so there may be failing edge-cases that haven't been
@@ -86,6 +88,7 @@ Prior to using `paperpile-notion`, you'll need to setup a few things:
 # Commands
 
 <!-- commands -->
+
 * [`paperpile-notion articles:clean BIBTEXPATH`](#paperpile-notion-articlesclean-bibtexpath)
 * [`paperpile-notion articles:sync BIBTEXPATH`](#paperpile-notion-articlessync-bibtexpath)
 * [`paperpile-notion authors:clean BIBTEXPATH`](#paperpile-notion-authorsclean-bibtexpath)
@@ -114,7 +117,8 @@ EXAMPLES
   $ paperpile-notion articles:clean /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See code: [dist/commands/articles/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.2/dist/commands/articles/clean.ts)_
+_See
+code: [dist/commands/articles/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.2/dist/commands/articles/clean.ts)_
 
 ## `paperpile-notion articles:sync BIBTEXPATH`
 
@@ -139,7 +143,8 @@ EXAMPLES
   $ paperpile-notion articles:sync /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See code: [dist/commands/articles/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.2/dist/commands/articles/sync.ts)_
+_See
+code: [dist/commands/articles/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.2/dist/commands/articles/sync.ts)_
 
 ## `paperpile-notion authors:clean BIBTEXPATH`
 
@@ -166,7 +171,8 @@ EXAMPLES
   $ paperpile-notion authors:clean /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See code: [dist/commands/authors/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.2/dist/commands/authors/clean.ts)_
+_See
+code: [dist/commands/authors/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.2/dist/commands/authors/clean.ts)_
 
 ## `paperpile-notion authors:sync BIBTEXPATH`
 
@@ -192,7 +198,8 @@ EXAMPLES
   $ paperpile-notion authors:sync /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See code: [dist/commands/authors/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.2/dist/commands/authors/sync.ts)_
+_See
+code: [dist/commands/authors/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.2/dist/commands/authors/sync.ts)_
 <!-- commandsstop -->
 
 * [`paperpile-notion articles:clean`](#paperpile-notion-articlesclean)
@@ -288,26 +295,3 @@ EXAMPLES
 
 _See
 code: [dist/commands/authors/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.0.0/dist/commands/authors/sync.ts)_
-
-## `paperpile-notion help [COMMAND]`
-
-Display help for paperpile-notion.
-
-```
-USAGE
-  $ paperpile-notion help [COMMAND] [-n]
-
-ARGUMENTS
-  COMMAND  Command to show help for.
-
-FLAGS
-  -n, --nested-commands  Include all nested commands in the output.
-
-DESCRIPTION
-  Display help for paperpile-notion.
-```
-
-_See
-code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.10/src/commands/help.ts)_
-
-[forum.paperpile/notion]: https://forum.paperpile.com/t/suggestion-for-notion-hook/
