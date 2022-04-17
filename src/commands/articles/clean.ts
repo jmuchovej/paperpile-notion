@@ -1,48 +1,27 @@
-import {Command, Flags} from '@oclif/core'
 import {removeEmptyRelationOrMultiSelects} from "../../notion";
-import path from "node:path";
-import {Config, ArticlesDB} from "../../config";
+import {ArticlesDB} from "../../config";
+import BaseCommand from '../../base';
 
-export default class ArticlesClean extends Command {
-  static description = 'describe the command here'
+export default class ArticlesClean extends BaseCommand {
+  static summary: string = `Cleans up your Articles Database.`
 
-  static examples = [
-    '<%= config.bin %> <%= command.id %>',
-  ]
-
-  static flags = {
-    config: Flags.string({
-      char: `c`,
-      description: `Path to your config file`,
-      required: true
-    }),
-    bibtex: Flags.string({
-      char: `f`,
-      description: `BibTeX file to update Notion from`,
-      required: true
-    }),
-  }
-
-  static args = []
+  static description: string = `1. Removes dangling articles without authors.`
 
   public async run(): Promise<void> {
-    const {args, flags} = await this.parse(ArticlesClean)
+    await this.parse(ArticlesClean)
 
-    const {default: obj} = await import(path.join(process.cwd(), flags.config))
-    const config = new Config(obj)
+    const articles: ArticlesDB = <ArticlesDB>this.appConfig.databases.articles
 
-    const articles = config.databases.articles as ArticlesDB
-
-    console.log(`Removing Articles with no Authors.`)
-    await archivePapersWithNoAuthors(articles, config.authorType)
-    console.log()
-    console.log()
+    this.log(`Removing Articles with no Authors.`)
+    await archivePapersWithNoAuthors(this, articles, this.appConfig.authorType)
+    this.log()
+    this.log()
 
     // TODO implement deduplication
   }
 }
 
-const archivePapersWithNoAuthors = async (articlesDB: ArticlesDB, propType: string) => {
+const archivePapersWithNoAuthors = async (CLI: BaseCommand, articlesDB: ArticlesDB, propType: string): Promise<void> => {
   const {databaseID, authorRef} = articlesDB
-  await removeEmptyRelationOrMultiSelects(databaseID, authorRef, propType);
+  await removeEmptyRelationOrMultiSelects(CLI, databaseID, authorRef, propType);
 }

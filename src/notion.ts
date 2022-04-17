@@ -11,6 +11,7 @@ import * as _ from "lodash"
 import {GetDatabaseResponse} from "@notionhq/client/build/src/api-endpoints"
 import {APIErrorCode, APIResponseError} from "@notionhq/client";
 import {performance} from "perf_hooks";
+import BaseCommand from "./base";
 
 // TODO do a better job at supporting legacy ENV vars and a --token flag
 const token = process.env.NOTION_INTEGRATION_TOKEN
@@ -92,7 +93,7 @@ export class Database<T> {
 
 export const BATCH_SIZE = 10;
 
-export const batchEntries = async (entries: any[], toNotion: Function) => {
+export const batchEntries = async (CLI: BaseCommand, entries: any[], toNotion: Function) => {
   const failedEntries: any[] = [];
   const chunks = _.chunk(entries, BATCH_SIZE)
 
@@ -112,6 +113,9 @@ export const batchEntries = async (entries: any[], toNotion: Function) => {
               console.error("Validation Failed:")
               console.log(error.body)
               break;
+            case APIErrorCode.RateLimited:
+              CLI.error("We've been rate limited. Please run again in ~20 minutes.")
+              break;
             default:
               console.log(error)
               break
@@ -124,8 +128,8 @@ export const batchEntries = async (entries: any[], toNotion: Function) => {
   return failedEntries;
 }
 
-export const createEntries = async (entries: any[], toNotion: Function, dbID: string) => {
-  return await batchEntries(entries, async (entry: any) => {
+export const createEntries = async (CLI: BaseCommand, entries: any[], toNotion: Function, dbID: string) => {
+  return await batchEntries(CLI, entries, async (entry: any) => {
     const response = await Notion.pages.create({
       parent: {database_id: dbID},
       properties: toNotion(entry)
@@ -133,8 +137,8 @@ export const createEntries = async (entries: any[], toNotion: Function, dbID: st
   });
 }
 
-export const updateEntries = async (entries: any[], toNotion: Function) => {
-  return await batchEntries(entries, async (entry: any) => {
+export const updateEntries = async (CLI: BaseCommand, entries: any[], toNotion: Function) => {
+  return await batchEntries(CLI, entries, async (entry: any) => {
     const response = await Notion.pages.update({
       page_id: entry.pageID,
       properties: toNotion(entry)
@@ -142,7 +146,7 @@ export const updateEntries = async (entries: any[], toNotion: Function) => {
   });
 }
 
-export const removeEmptyRelationOrMultiSelects = async (database_id: string, fieldName: string, propType: string) => {
+export const removeEmptyRelationOrMultiSelects = async (CLI: BaseCommand, database_id: string, fieldName: string, propType: string) => {
   const iterable = iteratePaginatedAPI(Notion.databases.query, {
     database_id,
     // @ts-ignore
@@ -157,7 +161,7 @@ export const removeEmptyRelationOrMultiSelects = async (database_id: string, fie
   let asArray = await asyncIterableToArray(iterable)
 
   while (asArray.length > 0) {
-    asArray = await batchEntries(asArray, async (entry: any) => {
+    asArray = await batchEntries(CLI, asArray, async (entry: any) => {
       await Notion.pages.update({
         page_id: entry.id,
         archived: true,

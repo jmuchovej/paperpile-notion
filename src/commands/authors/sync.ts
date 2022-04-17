@@ -1,5 +1,3 @@
-import {Command, Flags} from "@oclif/core"
-import {readBibTeX} from "../../bibtex"
 import _ from "lodash"
 import {createEntries, diff, updateEntries} from "../../notion"
 import {
@@ -7,62 +5,38 @@ import {
   initAuthorDB,
   prepareAuthorsForNotion
 } from "../../models/author"
-import path from "node:path";
-import {AuthorsDB, Config} from "../../config"
+import {AuthorsDB} from "../../config"
+import BaseCommand from '../../base';
 
-export default class AuthorsSync extends Command {
-  static description = `describe the command here`
-
-  static examples = [
-    `<%= config.bin %> <%= command.id %>`,
-  ]
-
-  static flags = {
-    config: Flags.string({
-      char: `c`,
-      description: `Path to your config file`,
-      required: true
-    }),
-    bibtex: Flags.string({
-      char: `f`,
-      description: `BibTeX file to update Notion from`,
-      required: true
-    }),
-  }
-
-  static args = []
+export default class AuthorsSync extends BaseCommand {
+  static summary: string = `Syncs your Authors Database with the local BibTeX file.`
+  static description: string = `Authors will be created if not present (or if they don't match a manually entered alias). Otherwise, Authors will have their name stripped of whitespace and articles consolidation based on matching Aliases.`
 
   public async run(): Promise<void> {
-    const {args, flags} = await this.parse(AuthorsSync)
+    await this.parse(AuthorsSync)
 
-    const {default: obj} = await import(path.join(process.cwd(), flags.config))
-    const config = new Config(obj)
-
-    if (!config.databases.authors) {
-      console.log("You don't have an Authors database. Exiting.")
-      return  // analogous to this.exit(0), but keeps WebStorm from whining
+    if (!this.appConfig.databases.authors) {
+      this.error("You don't have an Authors database. Exiting.")
+      this.exit(0) // analogous to this.exit(0), but keeps WebStorm from whining
     }
-    const authors = config.databases.authors as AuthorsDB
-
-    const BibTeX = readBibTeX(flags.bibtex)
-    const bibtexAuthors: string[] = _.chain(BibTeX).values().flatMap((o) => o.authors).uniq().filter().value()
+    const authors: AuthorsDB = <AuthorsDB>this.appConfig.databases.authors
 
     const {authorIndex} = await initAuthorDB(authors.databaseID, this.config.cacheDir)
 
-    const {toCreate, toUpdate} = diff(bibtexAuthors, _.keys(authorIndex))
+    const {toCreate, toUpdate} = diff(this.BibTeXAuthors, _.keys(authorIndex))
 
     let notionCreates = toCreate.map((author: string) => {
-      return prepareAuthorsForNotion(author, authorIndex, config)
+      return prepareAuthorsForNotion(author, authorIndex, this.appConfig)
     })
     while (notionCreates.length > 0) {
-      notionCreates = await createEntries(notionCreates, AuthorToNotion, authors.databaseID)
+      notionCreates = await createEntries(this, notionCreates, AuthorToNotion, authors.databaseID)
     }
 
     let notionUpdates = toUpdate.map((author: string) => {
-      return prepareAuthorsForNotion(author, authorIndex, config)
+      return prepareAuthorsForNotion(author, authorIndex, this.appConfig)
     })
     while (notionUpdates.length > 0) {
-      notionUpdates = await updateEntries(notionUpdates, AuthorToNotion)
+      notionUpdates = await updateEntries(this, notionUpdates, AuthorToNotion)
     }
   }
 }

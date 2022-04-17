@@ -67,15 +67,15 @@ export class Config implements ConfigInterface {
     const {authors, articles} = databases;
 
     if (!_.isNil(authors) && _.isString(authors)) {
-      this.databases.authors = {
-        databaseID: authors as string,
+      this.databases.authors = <AuthorsDB>{
+        databaseID: <string>authors,
         articleRef: "Articles",
       }
     }
 
     if (_.isString(articles)) {
-      this.databases.articles = {
-        databaseID: articles as string,
+      this.databases.articles = <ArticlesDB>{
+        databaseID: <string>articles,
         authorRef: "Authors",
       }
     }
@@ -99,11 +99,11 @@ export class Config implements ConfigInterface {
     this.icons = icons
   }
 
-  get hasAuthorDB() {
+  get hasAuthorDB(): boolean {
     return !_.isNil(this.databases.authors)
   }
 
-  get authorType() {
+  get authorType(): string {
     return this.hasAuthorDB ? "relation" : "multi_select"
   }
 }

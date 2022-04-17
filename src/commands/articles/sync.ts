@@ -1,6 +1,3 @@
-import path = require("node:path");
-
-import {Command, Flags,} from "@oclif/core"
 import * as _ from "lodash"
 import {BibTeXForNotion} from "../../bibtex";
 
@@ -10,62 +7,40 @@ import {
   prepareBibTeXForNotion
 } from "../../models/article"
 import {initAuthorDB} from "../../models/author"
-import {readBibTeX} from "../../bibtex"
 import {createEntries, diff, updateEntries} from "../../notion"
-import {ArticlesDB, AuthorsDB, Config} from "../../config";
+import {ArticlesDB, AuthorsDB} from "../../config";
+import BaseCommand from '../../base';
 
-export default class ArticlesSync extends Command {
-  static description = `describe the command here`
+export default class ArticlesSync extends BaseCommand {
+  static summary: string = `Syncs your Articles Database with the local BibTeX file.`
 
-  static examples = [
-    `<%= config.bin %> <%= command.id %>`,
-  ]
-
-  static flags = {
-    config: Flags.string({
-      char: `c`,
-      description: `Path to your config file`,
-      required: true
-    }),
-    bibtex: Flags.string({
-      char: `f`,
-      description: `BibTeX file to update Notion from`,
-      required: true
-    }),
-  }
-
-  static args = []
+  static description: string = `Strictly creates or updates articles based on the ID assigned by Paperpile.`
 
   public async run(): Promise<void> {
     await this.parse(ArticlesSync)
-    const {args, flags} = await this.parse(ArticlesSync)
 
-    const {default: obj} = await import(path.join(process.cwd(), flags.config))
-    const config = new Config(obj)
-
-    const articlesDB = config.databases.articles as ArticlesDB
-    const authorsDB = config.databases.authors as AuthorsDB
+    const articlesDB: ArticlesDB = <ArticlesDB>this.appConfig.databases.articles
+    const authorsDB: AuthorsDB = <AuthorsDB>this.appConfig.databases.authors
 
     const {notion: articles} = await initArticleDB(articlesDB.databaseID, this.config.cacheDir)
 
     const {authorIndex} = await initAuthorDB(authorsDB.databaseID, this.config.cacheDir)
 
-    const BibTeX = _.chain(readBibTeX(flags.bibtex)).reduce(
+    const BibTeX = _.chain(this.BibTeX).reduce(
       (obj: BibTeXForNotion, bib: any, key: string) => {
-        obj[key] = prepareBibTeXForNotion(bib, authorIndex, config)
+        obj[key] = prepareBibTeXForNotion(bib, authorIndex, this.appConfig)
         return obj
       }, {}
     ).value()
 
-    console.log(`Found ${_.keys(BibTeX).length} articles in BibTeX and ${_.keys(articles).length} on Notion...`)
+    this.log(`Found ${_.keys(BibTeX).length} articles in BibTeX and ${_.keys(articles).length} on Notion...`)
     const {toCreate, toUpdate} = diff(_.keys(BibTeX), _.keys(articles))
 
     let notionCreates = _.map(toCreate, (ID: string) => {
       return BibTeX[ID]
     })
-
     while (notionCreates.length > 0) {
-      notionCreates = await createEntries(notionCreates, BibTeXToNotion, articlesDB.databaseID)
+      notionCreates = await createEntries(this, notionCreates, BibTeXToNotion, articlesDB.databaseID)
     }
 
     let notionUpdates = _.map(toUpdate, (ID: string) => {
@@ -73,9 +48,8 @@ export default class ArticlesSync extends Command {
       const {pageID} = articles[ID as string][0].frontmatter
       return {pageID, ...update}
     })
-
     while (notionUpdates.length > 0) {
-      notionUpdates = await updateEntries(notionUpdates, BibTeXToNotion)
+      notionUpdates = await updateEntries(this, notionUpdates, BibTeXToNotion)
     }
   }
 }

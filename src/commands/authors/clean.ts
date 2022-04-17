@@ -1,4 +1,3 @@
-import {Command, Flags} from "@oclif/core"
 import {
   asyncIterableToArray,
   getPageTitle, getPropertyValue,
@@ -11,62 +10,44 @@ import {
   removeEmptyRelationOrMultiSelects
 } from "../../notion"
 import * as _ from "lodash"
-import path from "node:path";
-import {AuthorsDB, Config} from "../../config";
+import {AuthorsDB} from "../../config";
+import BaseCommand from '../../base';
 
-export default class AuthorsClean extends Command {
-  static description = "describe the command here"
+export default class AuthorsClean extends BaseCommand {
+  static summary: string = `Cleans up your Authors Database.`
 
-  static examples = [
-    "<%= config.bin %> <%= command.id %>",
-  ]
-
-  static flags = {
-    config: Flags.string({
-      char: `c`,
-      description: `Path to your config file`,
-      required: true
-    }),
-    bibtex: Flags.string({
-      char: `f`,
-      description: `BibTeX file to update Notion from`,
-      required: true
-    }),
-  }
-
-  static args = []
+  static description: string = `
+  1. Removes dangling authors with no articles.
+  2. Attempts to clean up and merge authors and aliases.`
 
   public async run(): Promise<void> {
-    const {args, flags} = await this.parse(AuthorsClean)
+    await this.parse(AuthorsClean)
 
-    const {default: obj} = await import(path.join(process.cwd(), flags.config))
-    const config = new Config(obj)
-
-    if (!config.databases.authors) {
-      console.error("You don't have an Authors database. Exiting.")
-      return  // analogous to this.exit(0), but keeps WebStorm from whining
+    if (!this.appConfig.databases.authors) {
+      this.error("You don't have an Authors database. Exiting.")
+      this.exit(0) // analogous to this.exit(0), but keeps WebStorm from whining
     }
 
-    const authors = config.databases.authors as AuthorsDB
+    const authors: AuthorsDB = <AuthorsDB>this.appConfig.databases.authors
 
-    console.log(`Removing Authors with no Articles.`)
-    await archiveAuthorsWithNoArticles(authors)
-    console.log()
-    console.log()
+    this.log(`Removing Authors with no Articles.`)
+    await archiveAuthorsWithNoArticles(this, authors)
+    this.log()
+    this.log()
 
-    console.log(`Attempting de-duplication based on "Aliases".`)
-    await deduplicateAuthors(authors)
-    console.log()
-    console.log()
+    this.log(`Attempting de-duplication based on "Aliases".`)
+    await deduplicateAuthors(this, authors)
+    this.log()
+    this.log()
   }
 }
 
-const archiveAuthorsWithNoArticles = async (authorsDB: AuthorsDB) => {
+const archiveAuthorsWithNoArticles = async (CLI: BaseCommand, authorsDB: AuthorsDB): Promise<void> => {
   const {databaseID, articleRef} = authorsDB
-  await removeEmptyRelationOrMultiSelects(databaseID, articleRef, "relation")
+  await removeEmptyRelationOrMultiSelects(CLI, databaseID, articleRef, "relation")
 }
 
-const deduplicateAuthors = async (authorsDB: AuthorsDB) => {
+const deduplicateAuthors = async (CLI: BaseCommand, authorsDB: AuthorsDB) => {
   const {databaseID, articleRef} = authorsDB
 
   const nonEmptyAliasIterable = iteratePaginatedAPI(
@@ -99,8 +80,9 @@ const deduplicateAuthors = async (authorsDB: AuthorsDB) => {
 
   while (nonEmptyAliasArray.length > 0) {
     nonEmptyAliasArray = await batchEntries(
+      CLI,
       nonEmptyAliasArray,
-      async (entry: any) => {
+      async (entry: any): Promise<void> => {
         pages[entry.id] = entry
         toUpdate.push(entry.id)
 
@@ -139,7 +121,7 @@ const deduplicateAuthors = async (authorsDB: AuthorsDB) => {
     return await asyncIterableToArray(iterable)
   }
 
-  console.log()
+  CLI.log()
   for await (const [name, pageID] of _.entries(authorsWithAliases)) {
     const result = await queryForAuthor(name)
     if (result.length == 0 || result[0].id === pageID)
@@ -160,14 +142,14 @@ const deduplicateAuthors = async (authorsDB: AuthorsDB) => {
     }
     console.log(`The alias of ${name} (${pageID}) will now have ${articles[pageID].length} articles.`)
   }
-  console.log()
+  CLI.log()
 
-  console.log("Archiving detected duplicates...")
+  CLI.log("Archiving detected duplicates...")
   let notionArchive = _.map(toArchive, (id) => {
     return {id}
   })
   while (notionArchive.length > 0) {
-    notionArchive = await batchEntries(notionArchive, async (entry: any) => {
+    notionArchive = await batchEntries(CLI, notionArchive, async (entry: any) => {
       await Notion.pages.update({
         page_id: entry.id,
         archived: true,
@@ -175,12 +157,12 @@ const deduplicateAuthors = async (authorsDB: AuthorsDB) => {
     })
   }
 
-  console.log("Migrating duplicates' articles to correct alias...")
+  CLI.log("Migrating duplicates' articles to correct alias...")
   let notionUpdate = _.map(toUpdate, (id) => {
     return {id, articles: articles[id]}
   })
   while (notionUpdate.length > 0) {
-    notionUpdate = await batchEntries(notionUpdate, async (entry: any) => {
+    notionUpdate = await batchEntries(CLI, notionUpdate, async (entry: any) => {
       await Notion.pages.update({
         page_id: entry.id,
         properties: {
