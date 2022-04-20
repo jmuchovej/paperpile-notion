@@ -43,7 +43,8 @@ export const readBibTeX = (path: string) => {
     citation.keyword = citation.keyword?.replaceAll(",", ";")
     citation.keyword = citation.keyword?.split(";").map((x: string) => x.trim())
     citation = {...citation, ...parseKeywords(citation.keyword)}
-    citation.authors = citation.author?.map(({family, given}: any) => {
+    const authors = citation.author ? citation.author : citation.editor
+    citation.authors = authors?.map(({family, given}: any) => {
       return [given, family].filter(e => e).join(" ").replaceAll(/[.*]/g, "")
     })
 
