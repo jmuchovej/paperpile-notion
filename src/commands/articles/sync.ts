@@ -40,7 +40,7 @@ export default class ArticlesSync extends BaseCommand {
     const toUpdate: { page_id: string, properties: NotionArticle }[] = []
     const toCreate: { parent: typeof parent, properties: NotionArticle }[] = []
 
-    const existingPages = await fetchDB(this.BibTeX, articleCMS)
+    const existingPages: FetchedArticleDB = await fetchDB(this.BibTeX, articleCMS)
 
     let counter: number = 0
     let startTime: number = performance.now(),
@@ -89,8 +89,8 @@ type FetchedArticleDB = {
 const fetchDB = async (BibTeX: any, cms: ArticleCMS): Promise<FetchedArticleDB> => {
   const db: FetchedArticleDB = {}
 
-  const chunks = _.chain(BibTeX).keys().chunk(100).value()
-  let batchId = 1
+  const chunks: string[][] = _.chain(BibTeX).keys().chunk(100).value()
+  let batchId: number = 1
 
   for await (const batch of chunks) {
     const filter = cms.filter.or(

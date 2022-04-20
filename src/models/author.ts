@@ -31,18 +31,16 @@ export type Author = {
   articles?: string[]
 }
 
-export const AuthorToNotion = (author: Author) => {
+export const AuthorToNotion = (author: Author): NotionAuthor => {
   const Name = makeTitle(author.name.trim())
 
   if (!Name)
     return
 
-  let Entry: NotionAuthor = {Name}
-
-  return Entry
+  return {Name}
 }
 
-type NotionAuthor = {
+export type NotionAuthor = {
   Name: Title,
 }
 

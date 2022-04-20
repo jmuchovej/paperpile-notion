@@ -1,13 +1,13 @@
 import {AuthorsDB} from "../../config"
 import BaseCommand, {BaseArgTypes, BaseFlagTypes} from "../../base"
+import {AuthorCMS, AuthorPage, batchEntries, createCMS} from "../../notion-cms"
 import {
-  AuthorCMS,
-  AuthorIteratorResult,
-  AuthorPage,
-  batchEntries,
-  createCMS,
-} from "../../notion-cms"
-import {AuthorToNotion, prepareAuthorsForNotion} from "../../models/author"
+  AuthorToNotion,
+  NotionAuthor,
+  prepareAuthorsForNotion,
+} from "../../models/author"
+import {richTextAsPlainText} from "@jitl/notion-api"
+import _ from "lodash"
 
 export default class AuthorsSync extends BaseCommand {
   static summary: string = `Syncs your Authors Database with the local BibTeX file.`
@@ -31,15 +31,12 @@ export default class AuthorsSync extends BaseCommand {
       database_id: this.appConfig.databases.authors.databaseID,
     }
 
-    const toCreate = []
+    const toCreate: { parent: typeof parent, properties: NotionAuthor }[] = []
+
+    const existingPages: FetchedAuthorDB = await fetchDB(this.BibTeXAuthors, authorCMS)
 
     for await (const author of this.BibTeXAuthors) {
-      const filter = authorCMS.filter.or(
-        authorCMS.filter.name.equals(author),
-        authorCMS.filter.aliases.contains(author),
-      )
-      const query: AuthorIteratorResult = await authorCMS.query({filter}).next()
-      const page: AuthorPage | undefined = query.value
+      const page: AuthorPage = existingPages[author]
       if (!page) {
         toCreate.push({
           parent,
@@ -51,20 +48,34 @@ export default class AuthorsSync extends BaseCommand {
     await batchEntries(this, toCreate, async (entry: typeof toCreate[0]) => {
       await authorCMS.config.notion.pages.create(entry)
     })
-    // const {toCreate, toUpdate} = diff(this.BibTeXAuthors, _.keys(authorIndex))
-
-    // let notionCreates = toCreate.map((author: string) => {
-    //   return prepareAuthorsForNotion(author, authorIndex, this.appConfig)
-    // })
-    // while (notionCreates.length > 0) {
-    //   notionCreates = await createEntries(this, notionCreates, AuthorToNotion, authors.databaseID)
-    // }
-
-    // let notionUpdates = toUpdate.map((author: string) => {
-    //   return prepareAuthorsForNotion(author, authorIndex, this.appConfig)
-    // })
-    // while (notionUpdates.length > 0) {
-    //   notionUpdates = await updateEntries(this, notionUpdates, AuthorToNotion)
-    // }
   }
+}
+
+type FetchedAuthorDB = {
+  [name: string]: AuthorPage
+}
+
+const fetchDB = async (authors: string[], cms: AuthorCMS) => {
+  const db: FetchedAuthorDB = {}
+
+  const chunks: string[][] = _.chunk(authors, 50)
+
+  for await (const batch of chunks) {
+    const filter = cms.filter.or(
+      ...batch.map((name: string) => cms.filter.or(
+        cms.filter.name.equals(name), cms.filter.aliases.contains(name),
+      )),
+    )
+    for await (const page of cms.query({filter})) {
+      let {frontmatter: {name, aliases}} = page
+      name = richTextAsPlainText(name)
+      aliases = richTextAsPlainText(aliases)
+        .split(";").map((a: string) => a.trim()).filter((a: string) => a)
+      for (const alias of [name, ...aliases]) {
+        db[alias] = page
+      }
+    }
+  }
+
+  return db
 }
