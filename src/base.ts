@@ -1,10 +1,10 @@
 import {Command, Flags} from "@oclif/core"
-import {Config} from "./config";
-import path from "node:path";
-import {Input} from "@oclif/core/lib/interfaces";
-import {BibTeXDB, readBibTeX} from "./bibtex";
-import _ from "lodash";
-import {NotionClient, NotionClientDebugLogger} from "@jitl/notion-api";
+import {newConfig, StrictConfig} from "./config"
+import path from "node:path"
+import {Input} from "@oclif/core/lib/interfaces"
+import {BibTeXDB, readBibTeX} from "./bibtex"
+import _ from "lodash"
+import {NotionClient, NotionClientDebugLogger} from "@jitl/notion-api"
 
 const baseFlags = {
   config: Flags.string({
@@ -17,7 +17,7 @@ const baseFlags = {
     env: `NOTION_INTEGRATION_TOKEN`,
     description: `Your Notion Integration's Token.`,
     required: true,
-  })
+  }),
 }
 export type BaseFlagTypes = typeof baseFlags
 
@@ -33,15 +33,13 @@ const loadConfig = async (
   configDir: string,
   configPath: string | undefined,
   notion: NotionClient,
-): Promise<Config> => {
+): Promise<StrictConfig> => {
   configPath = configPath ?
     path.join(process.cwd(), configPath) :
     path.join(configDir, "config.js")
 
   const {default: obj} = await import(configPath)
-  const config: Config = new Config(obj, notion);
-  await config.setupDBs()
-  return config
+  return await newConfig(obj, notion)
 }
 
 abstract class BaseCommand extends Command {
@@ -53,15 +51,15 @@ abstract class BaseCommand extends Command {
     "<%= config.bin %> <%= command.id %> /path/to/references.bib -c /path/to/paperpile-notion.config.js",
   ]
 
-  protected appConfig!: Config;
+  protected appConfig!: StrictConfig
   protected BibTeX!: BibTeXDB
   protected BibTeXAuthors!: string[]
-  protected notion!: NotionClient
+  notion!: NotionClient
 
   // Solved from: https://github.com/oclif/oclif/issues/225#issuecomment-574484114
   async init(): Promise<void> {
     const {args, flags} = await this.parse(
-      this.constructor as Input<any>
+      <Input<any>>this.constructor,
     )
 
     this.notion = new NotionClient({
