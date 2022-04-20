@@ -25,11 +25,12 @@ While this project is at `v1.x.x`, this should not be considered
 production-ready. It follows semantic versioning, and the migration to
 TypeScript, obviously, breaks compatability with the Python implementation.
 
-* [Initial Setup](#initial-setup)
-* [Usage](#usage)
+* [**🏗 Initial Setup**](#-initial-setup)
+* [**🧑‍💻Usage**](#-usage)
   * [[Recommended] Automatically (via GitHub Workflows)](#recommended-automatically-via-github-workflows)
   * [Manually](#manually)
-* [Commands](#commands)
+* [**🛠 Commands**](#-commands)
+
 
 # 🏗 Initial Setup
 
@@ -90,8 +91,10 @@ Prior to using `paperpile-notion`, you'll need to setup a few things:
 <!-- commands -->
 * [`paperpile-notion articles:clean BIBTEXPATH`](#paperpile-notion-articlesclean-bibtexpath)
 * [`paperpile-notion articles:sync BIBTEXPATH`](#paperpile-notion-articlessync-bibtexpath)
+* [`paperpile-notion articles:sync-diff BIBTEXPATH`](#paperpile-notion-articlessync-diff-bibtexpath)
 * [`paperpile-notion authors:clean BIBTEXPATH`](#paperpile-notion-authorsclean-bibtexpath)
 * [`paperpile-notion authors:sync BIBTEXPATH`](#paperpile-notion-authorssync-bibtexpath)
+* [`paperpile-notion authors:sync-diff BIBTEXPATH`](#paperpile-notion-authorssync-diff-bibtexpath)
 
 ## `paperpile-notion articles:clean BIBTEXPATH`
 
@@ -117,7 +120,7 @@ EXAMPLES
   $ paperpile-notion articles:clean /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See code: [dist/commands/articles/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.1.0/dist/commands/articles/clean.ts)_
+_See code: [dist/commands/articles/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.2.0/dist/commands/articles/clean.ts)_
 
 ## `paperpile-notion articles:sync BIBTEXPATH`
 
@@ -143,7 +146,31 @@ EXAMPLES
   $ paperpile-notion articles:sync /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See code: [dist/commands/articles/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.1.0/dist/commands/articles/sync.ts)_
+_See code: [dist/commands/articles/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.2.0/dist/commands/articles/sync.ts)_
+
+## `paperpile-notion articles:sync-diff BIBTEXPATH`
+
+describe the command here
+
+```
+USAGE
+  $ paperpile-notion articles:sync-diff [BIBTEXPATH] -t <value> [-c <value>] [-h]
+
+FLAGS
+  -c, --config=<value>  Path to your config file, if not in /Users/jmuchovej/.config/paperpile-notion/config.js.
+  -h, --help            Show CLI help.
+  -t, --token=<value>   (required) Your Notion Integration's Token.
+
+DESCRIPTION
+  describe the command here
+
+EXAMPLES
+  $ paperpile-notion articles:sync-diff /path/to/references.bib
+
+  $ paperpile-notion articles:sync-diff /path/to/references.bib -c /path/to/paperpile-notion.config.js
+```
+
+_See code: [dist/commands/articles/sync-diff.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.2.0/dist/commands/articles/sync-diff.ts)_
 
 ## `paperpile-notion authors:clean BIBTEXPATH`
 
@@ -171,7 +198,7 @@ EXAMPLES
   $ paperpile-notion authors:clean /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See code: [dist/commands/authors/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.1.0/dist/commands/authors/clean.ts)_
+_See code: [dist/commands/authors/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.2.0/dist/commands/authors/clean.ts)_
 
 ## `paperpile-notion authors:sync BIBTEXPATH`
 
@@ -198,5 +225,29 @@ EXAMPLES
   $ paperpile-notion authors:sync /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See code: [dist/commands/authors/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.1.0/dist/commands/authors/sync.ts)_
+_See code: [dist/commands/authors/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.2.0/dist/commands/authors/sync.ts)_
+
+## `paperpile-notion authors:sync-diff BIBTEXPATH`
+
+describe the command here
+
+```
+USAGE
+  $ paperpile-notion authors:sync-diff [BIBTEXPATH] -t <value> [-c <value>] [-h]
+
+FLAGS
+  -c, --config=<value>  Path to your config file, if not in /Users/jmuchovej/.config/paperpile-notion/config.js.
+  -h, --help            Show CLI help.
+  -t, --token=<value>   (required) Your Notion Integration's Token.
+
+DESCRIPTION
+  describe the command here
+
+EXAMPLES
+  $ paperpile-notion authors:sync-diff /path/to/references.bib
+
+  $ paperpile-notion authors:sync-diff /path/to/references.bib -c /path/to/paperpile-notion.config.js
+```
+
+_See code: [dist/commands/authors/sync-diff.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.2.0/dist/commands/authors/sync-diff.ts)_
 <!-- commandsstop -->
