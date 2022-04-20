@@ -1,0 +1,55 @@
+name: "Sync Paperpile to Notion"
+description: "An unofficial CLI to sync your Paperpile Articles/Authors to Notion."
+author: jmuchovej
+
+branding:
+  icon: book
+  color: blue
+
+inputs:
+  references:
+    description: "The path to your BibTeX containing the desired entries to sync"
+    required: true
+  token:
+    description: "Your Notion Integration Token."
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Install `paperpile-notion`"
+      shell: "bash"
+      run: "npm install -g @jmuchovej/paperpile-notion"
+
+    - name: "Download existing cache"
+      uses: "actions/download-artifact@v3"
+      with:
+        name: "paperpile-cache"
+        path: "~/.cache/paperpile-notion/"
+
+    - name: "Sync .config with ~/.config"
+      shell: bash
+      run: |
+        [ -d "$(pwd)/.config" ] && rsync -a $(pwd)/.config ${HOME}/
+
+    - name: "Sync Author's Database"
+      shell: bash
+      run: paperpile-notion authors:sync -t ${{ inputs.token }} ${{ inputs.references }}
+
+    - name: "Sync Article's Database"
+      shell: bash
+      run: paperpile-notion articles:sync -t ${{ inputs.token }} ${{ inputs.references }}
+
+    - name: "Clean Author's Database"
+      shell: bash
+      run: paperpile-notion authors:clean -t ${{ inputs.token }} ${{ inputs.references }}
+
+    - name: "Clean Article's Database"
+      shell: bash
+      run: paperpile-notion articles:clean -t ${{ inputs.token }} ${{ inputs.references }}
+
+    - name: "Upload existing cache"
+      uses: "actions/download-artifact@v3"
+      with:
+        name: "paperpile-cache"
+        path: "~/.cache/paperpile-notion/"
