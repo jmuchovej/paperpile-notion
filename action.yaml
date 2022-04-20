@@ -30,6 +30,7 @@ runs:
         check_artifacts: true
 
     - name: "Sync .config with ~/.config"
+      if: ${{ always() }}
       shell: bash
       run: |
         [ -d "$(pwd)/.cache" ] && rsync -a $(pwd)/.cache ${HOME}/
