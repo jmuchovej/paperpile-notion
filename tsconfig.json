@@ -5,7 +5,7 @@
     "module": "commonjs",
     "outDir": "dist",
     "rootDir": "src",
-    "strict": true,
+    "strict": false,
     "target": "es2021",
     "esModuleInterop": true,
     "moduleResolution": "node",
@@ -19,5 +19,5 @@
   },
   "include": [
     "src/**/*"
-  ],
+  ]
 }

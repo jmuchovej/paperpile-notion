@@ -297,25 +297,24 @@
   resolved "https://registry.npmjs.org/@isaacs/string-locale-compare/-/string-locale-compare-1.1.0.tgz"
   integrity sha512-SQ7Kzhh9+D+ZW9MA0zkYv3VXhIDNx+LzM6EJ+/65I3QY+enU6Itte7E5XX7EWrqLW2FN4n06GWzBnPoC3th2aQ==
 
-"@jitl/notion-api@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.npmjs.org/@jitl/notion-api/-/notion-api-0.1.2.tgz"
-  integrity sha512-hhnV8Mt5lbpJX7yiEgS1XB3dvsCzTQLD8LFRO0hLPfxyBr3AuiG18WX3yv+2YSVC348fXvlhQPb16dpxaIUX1A==
+"@jitl/notion-api@0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@jitl/notion-api/-/notion-api-0.2.1.tgz#f00de2c238dddfab63e81ada71625d671f490d23"
+  integrity sha512-R0H5hz/dCistR7vWOXmoddU1UiFRCErp5Wf7C/E+zlO01PJyJ+NMQuQyoEkpiE7oX6qOalKgnKf8+IGR82VLZA==
   dependencies:
-    "@jitl/util" "*"
+    "@jitl/util" "0.0.3"
     "@types/debug" "^4.1.7"
     "@types/mime-types" "^2.1.1"
     debug "^4.3.3"
-    emoji-datasource-apple "^7.0.2"
     emoji-unicode "^2.0.1"
     fast-safe-stringify "^2.1.1"
     mime-types "^2.1.34"
     node-emoji "^1.11.0"
 
-"@jitl/util@*":
-  version "0.0.2"
-  resolved "https://registry.npmjs.org/@jitl/util/-/util-0.0.2.tgz"
-  integrity sha512-xwUQr1fdqv0PpIrH/NlUCpECXolfKH2/uEZ6l2tgsePNZLmR1fqb7PDgT0QuPlLCxJMthndVoa236Ks77IOojA==
+"@jitl/util@0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@jitl/util/-/util-0.0.3.tgz#ef43903768c16200fcf4c0c9d4a79e5b9cb264f3"
+  integrity sha512-C7WAt4ROaPS9wL8Sxlen0KP9i/Z917rpModwkQBfNZUp61Be88CZx7T1hz7oG7nev9f2J+Ze2wDdQyS5uk+d8w==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -784,7 +783,7 @@
 
 "@types/debug@^4.1.7":
   version "4.1.7"
-  resolved "https://registry.npmjs.org/@types/debug/-/debug-4.1.7.tgz"
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.7.tgz#7cc0ea761509124709b8b2d1090d8f6c17aadb82"
   integrity sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==
   dependencies:
     "@types/ms" "*"
@@ -819,7 +818,7 @@
 
 "@types/mime-types@^2.1.1":
   version "2.1.1"
-  resolved "https://registry.npmjs.org/@types/mime-types/-/mime-types-2.1.1.tgz"
+  resolved "https://registry.yarnpkg.com/@types/mime-types/-/mime-types-2.1.1.tgz#d9ba43490fa3a3df958759adf69396c3532cf2c1"
   integrity sha512-vXOTGVSLR2jMw440moWTC7H19iUyLtP3Z1YTj7cSsubOICinjMxFeb/V57v9QdyyPGbbWolUFSSmSiRSn94tFw==
 
 "@types/minimatch@*", "@types/minimatch@^3.0.3":
@@ -834,7 +833,7 @@
 
 "@types/ms@*":
   version "0.7.31"
-  resolved "https://registry.npmjs.org/@types/ms/-/ms-0.7.31.tgz"
+  resolved "https://registry.yarnpkg.com/@types/ms/-/ms-0.7.31.tgz#31b7ca6407128a3d2bbc27fe2d21b345397f6197"
   integrity sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==
 
 "@types/node-fetch@^2.5.10":
@@ -1734,9 +1733,9 @@ dateformat@^4.5.0:
   resolved "https://registry.npmjs.org/dateformat/-/dateformat-4.6.3.tgz"
   integrity sha512-2P0p0pFGzHS5EMnhdxQi7aJN+iMheud0UhG4dlE1DLAlvL8JHjJJTX/CSm4JXwV0Ka5nGk3zC5mcb5bUQUxxMA==
 
-debug@4, debug@^4.3.2:
+debug@4, debug@^4.3.2, debug@^4.3.3:
   version "4.3.4"
-  resolved "https://registry.npmjs.org/debug/-/debug-4.3.4.tgz"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
   integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
   dependencies:
     ms "2.1.2"
@@ -1748,7 +1747,7 @@ debug@4.3.2:
   dependencies:
     ms "2.1.2"
 
-debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.3:
+debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1:
   version "4.3.3"
   resolved "https://registry.npmjs.org/debug/-/debug-4.3.3.tgz"
   integrity sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==
@@ -1858,11 +1857,6 @@ electron-to-chromium@^1.3.896:
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.16.tgz"
   integrity sha512-BQb7FgYwnu6haWLU63/CdVW+9xhmHls3RCQUFiV4lvw3wimEHTVcUk2hkuZo76QhR8nnDdfZE7evJIZqijwPdA==
 
-emoji-datasource-apple@^7.0.2:
-  version "7.0.2"
-  resolved "https://registry.npmjs.org/emoji-datasource-apple/-/emoji-datasource-apple-7.0.2.tgz"
-  integrity sha512-m127Ybt10utN5WF+0mehR2siDTh4CcS6N1Xq+0VE387XIZB+DYczrvc7amgAgEtema0lX1GpVzO2wEXKEChfqQ==
-
 emoji-regex@^8.0.0:
   version "8.0.0"
   resolved "https://registry.npmjs.org/emoji-regex/-/emoji-regex-8.0.0.tgz"
@@ -1870,7 +1864,7 @@ emoji-regex@^8.0.0:
 
 emoji-unicode@^2.0.1:
   version "2.0.1"
-  resolved "https://registry.npmjs.org/emoji-unicode/-/emoji-unicode-2.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/emoji-unicode/-/emoji-unicode-2.0.1.tgz#37b05f0cd20254fd366d1df4442b5c613a3a021a"
   integrity sha512-jjswgV5nR3KDqtC9ugzEOYQaBLLQP5hqaH2tiTBaq9maYpMnmvl9T+ogY3u2bN6O5NAP0Ddh9D+Meo7sfW/1uw==
 
 encoding@^0.1.12, encoding@^0.1.13:
@@ -2285,7 +2279,7 @@ fast-levenshtein@^3.0.0:
 
 fast-safe-stringify@^2.1.1:
   version "2.1.1"
-  resolved "https://registry.npmjs.org/fast-safe-stringify/-/fast-safe-stringify-2.1.1.tgz"
+  resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.1.1.tgz#c406a83b6e70d9e35ce3b30a81141df30aeba884"
   integrity sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==
 
 fastest-levenshtein@^1.0.7:
@@ -3314,7 +3308,7 @@ micromatch@^4.0.2, micromatch@^4.0.4:
 
 mime-db@1.52.0:
   version "1.52.0"
-  resolved "https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz"
+  resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.52.0.tgz#bbabcdc02859f4987301c856e3387ce5ec43bf70"
   integrity sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==
 
 mime-types@^2.1.12, mime-types@^2.1.34:
@@ -3482,7 +3476,7 @@ moo@^0.5.1:
 
 ms@2.1.2:
   version "2.1.2"
-  resolved "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
 ms@2.1.3, ms@^2.0.0:
@@ -3548,7 +3542,7 @@ nock@^13.0.0:
 
 node-emoji@^1.11.0:
   version "1.11.0"
-  resolved "https://registry.npmjs.org/node-emoji/-/node-emoji-1.11.0.tgz"
+  resolved "https://registry.yarnpkg.com/node-emoji/-/node-emoji-1.11.0.tgz#69a0150e6946e2f115e9d7ea4df7971e2628301c"
   integrity sha512-wo2DpQkQp7Sjm2A0cq+sN7EHKO6Sl0ctXeBdFZrL9T9+UywORbufTcTZxom8YqpLQt/FqNMUkOpkZrJVYSKD3A==
   dependencies:
     lodash "^4.17.21"
