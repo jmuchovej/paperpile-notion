@@ -29,7 +29,7 @@ runs:
         path: "~/.cache/paperpile-notion/"
         check_artifacts: true
 
-    - name: "Sync .config with ~/.config"
+    - name: "Sync local `{.config,.cache}` with `~/{.config,.cache}`"
       if: ${{ always() }}
       shell: bash
       run: |
@@ -39,22 +39,22 @@ runs:
     - name: "Sync Author's Database"
       if: ${{ always() }}
       shell: bash
-      run: paperpile-notion authors:sync -t ${{ inputs.token }} ${{ inputs.references }}
+      run: paperpile-notion authors:sync ${{ inputs.references }} -t ${{ inputs.token }}
 
     - name: "Sync Article's Database"
       if: ${{ always() }}
       shell: bash
-      run: paperpile-notion articles:sync -t ${{ inputs.token }} ${{ inputs.references }}
+      run: paperpile-notion articles:sync ${{ inputs.references }} -t ${{ inputs.token }}
 
     - name: "Clean Author's Database"
       if: ${{ always() }}
       shell: bash
-      run: paperpile-notion authors:clean -t ${{ inputs.token }} ${{ inputs.references }}
+      run: paperpile-notion authors:clean ${{ inputs.references }} -t ${{ inputs.token }}
 
     - name: "Clean Article's Database"
       if: ${{ always() }}
       shell: bash
-      run: paperpile-notion articles:clean -t ${{ inputs.token }} ${{ inputs.references }}
+      run: paperpile-notion articles:clean ${{ inputs.references }} -t ${{ inputs.token }}
 
     - name: "Upload existing cache"
       if: ${{ always() }}
