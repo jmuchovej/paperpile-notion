@@ -37,22 +37,27 @@ runs:
         [ -d "$(pwd)/.config" ] && rsync -a $(pwd)/.config ${HOME}/
 
     - name: "Sync Author's Database"
+      if: ${{ always() }}
       shell: bash
       run: paperpile-notion authors:sync -t ${{ inputs.token }} ${{ inputs.references }}
 
     - name: "Sync Article's Database"
+      if: ${{ always() }}
       shell: bash
       run: paperpile-notion articles:sync -t ${{ inputs.token }} ${{ inputs.references }}
 
     - name: "Clean Author's Database"
+      if: ${{ always() }}
       shell: bash
       run: paperpile-notion authors:clean -t ${{ inputs.token }} ${{ inputs.references }}
 
     - name: "Clean Article's Database"
+      if: ${{ always() }}
       shell: bash
       run: paperpile-notion articles:clean -t ${{ inputs.token }} ${{ inputs.references }}
 
     - name: "Upload existing cache"
+      if: ${{ always() }}
       uses: "actions/download-artifact@v3"
       with:
         name: "paperpile-cache"
