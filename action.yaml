@@ -22,14 +22,17 @@ runs:
       run: "npm install -g @jmuchovej/paperpile-notion"
 
     - name: "Download existing cache"
-      uses: "actions/download-artifact@v3"
+      uses: "dawidd6/action-download-artifact@v2"
       with:
+        workflow: "sync.yml"
         name: "paperpile-cache"
         path: "~/.cache/paperpile-notion/"
+        check_artifacts: true
 
     - name: "Sync .config with ~/.config"
       shell: bash
       run: |
+        [ -d "$(pwd)/.cache" ] && rsync -a $(pwd)/.cache ${HOME}/
         [ -d "$(pwd)/.config" ] && rsync -a $(pwd)/.config ${HOME}/
 
     - name: "Sync Author's Database"
