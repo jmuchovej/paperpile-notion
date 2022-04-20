@@ -1,0 +1,20 @@
+name: "Add latest tag to new release"
+on:
+  release:
+    types: [ "published" ]
+
+jobs:
+  run:
+    name: "Bump `latest` tag to most recent release"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@master
+
+      - name: "Run `EndBug/latest-tag@latest`"
+        uses: "EndBug/latest-tag@latest"
+        with:
+          tag-name: "latest"
+          description: "The `latest` tag has been bumped using `EndBug/latest-tag@latest`."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
