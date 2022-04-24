@@ -192,10 +192,10 @@ export function createCMS<T extends DBTypes>(
     // @ts-ignore
     slug: primaryKey,
     cache: {
-      directory: path.join(cliConfig.cacheDir, db),
+      directory: path.join(cliConfig.cacheDir),
     },
     assets: {
-      directory: path.join(cliConfig.cacheDir, db, "assets"),
+      directory: path.join(cliConfig.cacheDir, "assets"),
       downloadExternalAssets: false,
     },
   })
