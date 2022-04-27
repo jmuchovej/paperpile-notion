@@ -35,10 +35,15 @@ jobs:
         shell: "bash"
         run: |
           cd ./st
+
           echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
           gh auth setup-git
+
+          git config user.name "John Muchovej"
           git checkout -b jmuchovej/update-config.js
+
           git add .config/paperpile-notion/config.js
           git commit -m "🔧 Update \`config.js\` to reflect latest release configuration"
+
           git push origin jmuchovej/update-config.js
           gh pr --fill
