@@ -1,0 +1,34 @@
+name: "Sync `config.js` to Template Repository"
+
+on:
+  push:
+    paths:
+      - docs/config.js
+
+jobs:
+  sync-to-template-repo:
+    name: "Sync `config.js` to Template Repository"
+
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Checkout Source Repository"
+        uses: "actions/checkout@v3"
+        with:
+          repository: "${{ github.repository }}"
+          path: "pn"
+
+      - name: "Checkout Template Repository"
+        uses: "actions/checkout@v3"
+        with:
+          repository: "jmuchovej/sync-paperpile-to-notion"
+          path: "st"
+
+      - name: "Sync `config.js` changes"
+        shell: "bash"
+        run: |
+          cp ./pn/docs/config.js ./st/.config/paperpile-notion/config.js
+          cd ./st
+          git add .config/paperpile-notion/config.js
+          git commit -m "🔧 Update \`config.js\` to reflect latest release configuration"
+          git push -u origin main
