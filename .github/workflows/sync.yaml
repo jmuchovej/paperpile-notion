@@ -6,9 +6,9 @@ on:
       references:
         required: true
         type: "string"
+    secrets:
       token:
         required: true
-        type: "string"
 
 jobs:
   sync-to-notion:
@@ -28,4 +28,4 @@ jobs:
         uses: "jmuchovej/paperpile-notion@latest"
         with:
           references: "${{ inputs.references }}"
-          token: "${{ inputs.token }}"
+          token: "${{ secrets.token }}"
