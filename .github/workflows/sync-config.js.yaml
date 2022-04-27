@@ -1,6 +1,7 @@
 name: "Sync `config.js` to Template Repository"
 
 on:
+  workflow_dispatch: { }
   push:
     paths:
       - docs/config.js
@@ -32,10 +33,14 @@ jobs:
 
       - name: "Commit Changes to Template Repository"
         shell: "bash"
+        env:
+          GH_TOKEN: "$"
         run: |
           cd ./st
-          git config user.email "5000729+jmuchovej@users.noreply.github.com"
+          gh auth login
+          gh auth setup-git
           git config user.name "John Muchovej"
           git add .config/paperpile-notion/config.js
           git commit -m "🔧 Update \`config.js\` to reflect latest release configuration"
-          git push -u origin main
+          git push origin jmuchovej/update-config.js
+          gh pr --fill
