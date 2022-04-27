@@ -38,17 +38,10 @@ jobs:
       - name: "Commit `config.js` Changes to Template Repository"
         uses: "endbug/add-and-commit@v9"
         with:
-          message: "🔧 Update `config.js` to reflect latest release configuration"
+          message: "✨ Sync `config.js` and `sync.yaml` changes with upstream"
           committer_name: "GitHub Actions"
           committer_email: "actions@github.com"
           cwd: "./st/"
-          add: ".config/paperpile-notion/config.js"
-
-      - name: "Commit `sync.yaml` Changes to Template Repository"
-        uses: "endbug/add-and-commit@v9"
-        with:
-          message: "👷 Update `sync.yaml` to reflect latest workflow configuration"
-          committer_name: "GitHub Actions"
-          committer_email: "actions@github.com"
-          cwd: "./st/"
-          add: ".github/workflows/sync.yaml"
+          add: |
+            .config/paperpile-notion/config.js
+            .github/workflows/sync.yaml
