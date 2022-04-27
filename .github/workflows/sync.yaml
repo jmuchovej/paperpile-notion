@@ -1,0 +1,31 @@
+name: "Sync Paperpile to Notion"
+
+on:
+  workflow_call:
+    inputs:
+      references:
+        required: true
+        type: "string"
+      token:
+        required: true
+        type: "string"
+
+jobs:
+  sync-to-notion:
+    name: "Sync Paperpile to Notion"
+
+    runs-on: "ubuntu-latest"
+
+    concurrency:
+      group: "paperpile-sync"
+      cancel-in-progress: true
+
+    steps:
+      - name: "Checkout repository"
+        uses: "actions/checkout@v3"
+
+      - name: "Run `paperpile-notion` sync"
+        uses: "jmuchovej/paperpile-notion@latest"
+        with:
+          references: "${{ inputs.references }}"
+          token: "${{ inputs.token }}"
