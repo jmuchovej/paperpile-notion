@@ -19,12 +19,14 @@ jobs:
         with:
           repository: "${{ github.repository }}"
           path: "pn"
+          token: ${{ secrets.PAPERPILE_REPO_PAT }}
 
       - name: "Checkout Template Repository"
         uses: "actions/checkout@v3"
         with:
           repository: "jmuchovej/sync-paperpile-to-notion"
           path: "st"
+          token: ${{ secrets.PAPERPILE_REPO_PAT }}
 
       - name: "Sync `config.js` changes"
         shell: "bash"
@@ -32,18 +34,10 @@ jobs:
           cp ./pn/docs/config.js ./st/.config/paperpile-notion/config.js
 
       - name: "Commit Changes to Template Repository"
-        shell: "bash"
-        run: |
-          cd ./st
-
-          echo ${{ secrets.PAPERPILE_REPO_PAT }} | gh auth login --with-token
-          gh auth setup-git
-
-          git config user.name "John Muchovej"
-          git checkout -b jmuchovej/update-config.js
-
-          git add .config/paperpile-notion/config.js
-          git commit -m "🔧 Update \`config.js\` to reflect latest release configuration"
-
-          git push origin jmuchovej/update-config.js
-          gh pr --fill
+        uses: "endbug/add-and-commit@v9"
+        with:
+          message: "🔧 Update `config.js` to reflect latest release configuration"
+          committer_name: "GitHub Actions"
+          committer_email: "actions@github.com"
+          cwd: "./st/"
+          add: ".config/paperpile-notion/config.js"
