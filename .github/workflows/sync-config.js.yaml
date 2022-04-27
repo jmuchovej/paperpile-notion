@@ -33,11 +33,9 @@ jobs:
 
       - name: "Commit Changes to Template Repository"
         shell: "bash"
-        env:
-          GH_TOKEN: "$"
         run: |
           cd ./st
-          gh auth login
+          echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
           gh auth setup-git
           git config user.name "John Muchovej"
           git add .config/paperpile-notion/config.js
