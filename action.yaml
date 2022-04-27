@@ -21,44 +21,49 @@ runs:
       shell: "bash"
       run: "npm install -g @jmuchovej/paperpile-notion"
 
-    - name: "Download existing cache"
+    - continue-on-error: true
+      name: "Download `paperpile-notion` cache"
       uses: "dawidd6/action-download-artifact@v2"
       with:
-        workflow: "sync.yml"
-        name: "paperpile-cache"
-        path: "~/.cache/paperpile-notion/"
-        check_artifacts: true
+        workflow: "sync.yaml"
+        name: "paperpile-notion-cache"
+        path: ".cache/paperpile-notion/"
+        search_artifacts: true
 
     - name: "Sync local `{.config,.cache}` with `~/{.config,.cache}`"
-      if: ${{ always() }}
-      shell: bash
+      shell: "bash"
       run: |
         [ -d "$(pwd)/.cache" ] && rsync -a $(pwd)/.cache ${HOME}/
         [ -d "$(pwd)/.config" ] && rsync -a $(pwd)/.config ${HOME}/
 
     - name: "Sync Author's Database"
-      if: ${{ always() }}
-      shell: bash
-      run: paperpile-notion authors:sync ${{ inputs.references }} -t ${{ inputs.token }}
+      shell: "bash"
+      env:
+        DEBUG: "@jitl/notion-api:cms:cache,@jtil/notion-api:children,@jitl/notion-api:iterate"
+      run: "paperpile-notion authors:sync ${{ inputs.references }} -t ${{ inputs.token }}"
 
     - name: "Sync Article's Database"
-      if: ${{ always() }}
-      shell: bash
-      run: paperpile-notion articles:sync ${{ inputs.references }} -t ${{ inputs.token }}
+      shell: "bash"
+      env:
+        DEBUG: "@jitl/notion-api:cms:cache,@jtil/notion-api:children,@jitl/notion-api:iterate"
+      run: "paperpile-notion articles:sync ${{ inputs.references }} -t ${{ inputs.token }}"
 
     - name: "Clean Author's Database"
-      if: ${{ always() }}
-      shell: bash
-      run: paperpile-notion authors:clean ${{ inputs.references }} -t ${{ inputs.token }}
+      shell: "bash"
+      env:
+        DEBUG: "@jitl/notion-api:cms:cache,@jtil/notion-api:children,@jitl/notion-api:iterate"
+      run: "paperpile-notion authors:clean ${{ inputs.references }} -t ${{ inputs.token }}"
 
     - name: "Clean Article's Database"
-      if: ${{ always() }}
-      shell: bash
-      run: paperpile-notion articles:clean ${{ inputs.references }} -t ${{ inputs.token }}
+      shell: "bash"
+      env:
+        DEBUG: "@jitl/notion-api:cms:cache,@jtil/notion-api:children,@jitl/notion-api:iterate"
+      run: "paperpile-notion articles:clean ${{ inputs.references }} -t ${{ inputs.token }}"
 
-    - name: "Upload existing cache"
-      if: ${{ always() }}
+    - if: always()
+      name: "Upload `paperpile-notion` cache as Artifact"
       uses: "actions/download-artifact@v3"
       with:
-        name: "paperpile-cache"
-        path: "~/.cache/paperpile-notion/"
+        name: "paperpile-notion-cache"
+        path: "~/.cache/paperpile-notion/*.json"
+        retention-days: 90
