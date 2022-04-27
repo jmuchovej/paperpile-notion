@@ -5,7 +5,8 @@ on:
   push:
     paths:
       - docs/config.js
-      - .github/workflows/sync-config.js.yaml
+      - docs/sync.yaml
+      - .github/workflows/sync-docs-changes.yaml
 
 jobs:
   sync-to-template-repo:
@@ -32,8 +33,9 @@ jobs:
         shell: "bash"
         run: |
           cp ./pn/docs/config.js ./st/.config/paperpile-notion/config.js
+          cp ./pn/docs/sync.yaml ./st/.github/workflows/sync.yaml
 
-      - name: "Commit Changes to Template Repository"
+      - name: "Commit `config.js` Changes to Template Repository"
         uses: "endbug/add-and-commit@v9"
         with:
           message: "🔧 Update `config.js` to reflect latest release configuration"
@@ -41,3 +43,12 @@ jobs:
           committer_email: "actions@github.com"
           cwd: "./st/"
           add: ".config/paperpile-notion/config.js"
+
+      - name: "Commit `sync.yaml` Changes to Template Repository"
+        uses: "endbug/add-and-commit@v9"
+        with:
+          message: "👷 Update `sync.yaml` to reflect latest workflow configuration"
+          committer_name: "GitHub Actions"
+          committer_email: "actions@github.com"
+          cwd: "./st/"
+          add: ".github/workflows/sync.yaml"
