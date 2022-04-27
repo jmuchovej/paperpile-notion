@@ -18,7 +18,7 @@ jobs:
       - name: "Checkout Source Repository"
         uses: "actions/checkout@v3"
         with:
-          repository: "${{ github.repository }}"
+          repository: "jmuchovej/paperpile-notion"
           path: "pn"
           token: ${{ secrets.PAPERPILE_REPO_PAT }}
 
@@ -32,8 +32,8 @@ jobs:
       - name: "Sync `config.js` changes"
         shell: "bash"
         run: |
-          cp ./pn/docs/config.js ./st/.config/paperpile-notion/config.js
-          cp ./pn/docs/sync.yaml ./st/.github/workflows/sync.yaml
+          rsync -av --progress ./pn/docs/config.js ./st/.config/paperpile-notion/config.js
+          rsync -av --progress ./pn/docs/sync.yaml ./st/.github/workflows/sync.yaml
 
       - name: "Commit `config.js` Changes to Template Repository"
         uses: "endbug/add-and-commit@v9"
@@ -42,6 +42,6 @@ jobs:
           committer_name: "GitHub Actions"
           committer_email: "actions@github.com"
           cwd: "./st/"
-          add: |
+          add: >-
             .config/paperpile-notion/config.js
             .github/workflows/sync.yaml
