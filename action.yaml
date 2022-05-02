@@ -69,7 +69,7 @@ runs:
 
     - if: always()
       name: "Upload `paperpile-notion` cache as Artifact"
-      uses: "actions/download-artifact@v3"
+      uses: "actions/upload-artifact@v3"
       with:
         name: "paperpile-notion-cache"
         path: "~/.cache/paperpile-notion/*.json"
