@@ -88,7 +88,6 @@ Prior to using `paperpile-notion`, you'll need to setup a few things:
 # 🛠 Commands
 
 <!-- commands -->
-
 * [`paperpile-notion articles:clean BIBTEXPATH`](#paperpile-notion-articlesclean-bibtexpath)
 * [`paperpile-notion articles:sync BIBTEXPATH`](#paperpile-notion-articlessync-bibtexpath)
 * [`paperpile-notion articles:sync-diff BIBTEXPATH`](#paperpile-notion-articlessync-diff-bibtexpath)
@@ -120,8 +119,7 @@ EXAMPLES
   $ paperpile-notion articles:clean /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See
-code: [dist/commands/articles/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.2.2/dist/commands/articles/clean.ts)_
+_See code: [dist/commands/articles/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.3.0/dist/commands/articles/clean.ts)_
 
 ## `paperpile-notion articles:sync BIBTEXPATH`
 
@@ -147,8 +145,7 @@ EXAMPLES
   $ paperpile-notion articles:sync /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See
-code: [dist/commands/articles/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.2.2/dist/commands/articles/sync.ts)_
+_See code: [dist/commands/articles/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.3.0/dist/commands/articles/sync.ts)_
 
 ## `paperpile-notion articles:sync-diff BIBTEXPATH`
 
@@ -172,8 +169,7 @@ EXAMPLES
   $ paperpile-notion articles:sync-diff /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See
-code: [dist/commands/articles/sync-diff.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.2.2/dist/commands/articles/sync-diff.ts)_
+_See code: [dist/commands/articles/sync-diff.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.3.0/dist/commands/articles/sync-diff.ts)_
 
 ## `paperpile-notion authors:clean BIBTEXPATH`
 
@@ -201,8 +197,7 @@ EXAMPLES
   $ paperpile-notion authors:clean /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See
-code: [dist/commands/authors/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.2.2/dist/commands/authors/clean.ts)_
+_See code: [dist/commands/authors/clean.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.3.0/dist/commands/authors/clean.ts)_
 
 ## `paperpile-notion authors:sync BIBTEXPATH`
 
@@ -229,8 +224,7 @@ EXAMPLES
   $ paperpile-notion authors:sync /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See
-code: [dist/commands/authors/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.2.2/dist/commands/authors/sync.ts)_
+_See code: [dist/commands/authors/sync.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.3.0/dist/commands/authors/sync.ts)_
 
 ## `paperpile-notion authors:sync-diff BIBTEXPATH`
 
@@ -254,6 +248,5 @@ EXAMPLES
   $ paperpile-notion authors:sync-diff /path/to/references.bib -c /path/to/paperpile-notion.config.js
 ```
 
-_See
-code: [dist/commands/authors/sync-diff.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.2.2/dist/commands/authors/sync-diff.ts)_
+_See code: [dist/commands/authors/sync-diff.ts](https://github.com/jmuchovej/paperpile-notion/blob/v1.3.0/dist/commands/authors/sync-diff.ts)_
 <!-- commandsstop -->
