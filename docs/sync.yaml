@@ -14,14 +14,26 @@ jobs:
 
     concurrency:
       group: "paperpile-sync"
-      cancel-in-progress: true
+      cancel-in-progress: false
 
     steps:
       - name: "Checkout repository"
         uses: "actions/checkout@v3"
+
+      - name: "Checkout repository again to retrieve old references"
+        uses: "actions/checkout@v3"
+        with:
+          path: "prev/"
+          fetch-depth: 2
+
+      - name: "Retrieve old references"
+        shell: "bash"
+        run: |
+          git checkout HEAD~1
 
       - name: "Run `paperpile-notion` sync"
         uses: "jmuchovej/paperpile-notion@latest"
         with:
           references: "references.bib"
           token: "${{ secrets.NOTION_INTEGRATION_TOKEN }}"
+          references-diff: "prev/references.bib"

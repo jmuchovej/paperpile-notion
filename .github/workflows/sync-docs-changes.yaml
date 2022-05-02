@@ -3,6 +3,8 @@ name: "Sync `config.js` to Template Repository"
 on:
   workflow_dispatch: { }
   push:
+    branches:
+      - main
     paths:
       - docs/config.js
       - docs/sync.yaml
@@ -25,7 +27,7 @@ jobs:
       - name: "Checkout Template Repository"
         uses: "actions/checkout@v3"
         with:
-          repository: "jmuchovej/sync-paperpile-to-notion"
+          repository: "jmuchovej/paperpile-notion-starter"
           path: "st"
           token: ${{ secrets.PAPERPILE_REPO_PAT }}
 
