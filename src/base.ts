@@ -1,3 +1,4 @@
+import {existsSync} from "fs"
 import {Command, Flags} from "@oclif/core"
 import {newConfig, StrictConfig} from "./config"
 import path from "node:path"
@@ -18,19 +19,21 @@ const baseFlags = {
     description: `Your Notion Integration Token. (NOTE: If you specify an environment variable of 'NOTION_INTEGRATION_TOKEN', that may be used.)`,
     required: true,
   }),
-  diff: Flags.file({
-    char: `d`,
-    description: `Your BibTeX file to diff against.`,
-    required: false,
-    exists: true,
-  }),
 }
 export type BaseFlagTypes = typeof baseFlags
 
 const baseArgs = [
   {
-    name: "bibtexPath",
+    name: `bibtexPath`,
     required: true,
+    hidden: false,
+    description: `Path to the BibTeX file you would like to sync with Notion.`,
+  },
+  {
+    name: `bibtexDiff`,
+    required: false,
+    hidden: false,
+    description: `Path to the BibTeX file you would like to diff "bibtexPath" against.`,
   },
 ]
 export type BaseArgTypes = typeof baseArgs
@@ -49,6 +52,7 @@ const loadConfig = async (
 }
 
 abstract class BaseCommand extends Command {
+  static strict: boolean = true
   static flags: BaseFlagTypes = baseFlags
   static args: BaseArgTypes = baseArgs
 
@@ -57,10 +61,9 @@ abstract class BaseCommand extends Command {
     "<%= config.bin %> <%= command.id %> /path/to/references.bib -c /path/to/paperpile-notion.config.js",
     "<%= config.bin %> <%= command.id %> /path/to/references.bib -t <your-integration-token>",
     "<%= config.bin %> <%= command.id %> /path/to/references.bib -t <your-integration-token> -c /path/to/paperpile-notion.config.js",
-    "<%= config.bin %> <%= command.id %> /path/to/references.bib",
-    "<%= config.bin %> <%= command.id %> /path/to/references.bib -d /path/to/your/previous/references.bib",
-    "<%= config.bin %> <%= command.id %> /path/to/references.bib -d /path/to/your/previous/references.bib -t <your-integration-token>",
-    "<%= config.bin %> <%= command.id %> /path/to/references.bib -d /path/to/your/previous/references.bib -t <your-integration-token> -c /path/to/paperpile-notion.config.js",
+    "<%= config.bin %> <%= command.id %> /path/to/references.bib /path/to/your/previous/references.bib",
+    "<%= config.bin %> <%= command.id %> /path/to/references.bib /path/to/your/previous/references.bib -t <your-integration-token>",
+    "<%= config.bin %> <%= command.id %> /path/to/references.bib /path/to/your/previous/references.bib -t <your-integration-token> -c /path/to/paperpile-notion.config.js",
   ]
 
   protected appConfig!: StrictConfig
@@ -83,9 +86,11 @@ abstract class BaseCommand extends Command {
 
     let bibtex: BibTeXDB
     const currBibTeX: BibTeXDB = readBibTeX(args.bibtexPath)
+
     console.log(`Found ${_.keys(currBibTeX).length} entries`)
-    if (flags.diff) {
-      const prevBibTeX: BibTeXDB = readBibTeX(flags.diff)
+
+    if (args.bibtexDiff && existsSync(args.bibtexDiff)) {
+      const prevBibTeX: BibTeXDB = readBibTeX(args.bibtexDiff)
       bibtex = diffBibTeX(prevBibTeX, currBibTeX)
       console.log(`Reduced to ${_.keys(bibtex).length} entries`)
     } else {
