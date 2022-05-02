@@ -2,7 +2,7 @@ import {Command, Flags} from "@oclif/core"
 import {newConfig, StrictConfig} from "./config"
 import path from "node:path"
 import {Input} from "@oclif/core/lib/interfaces"
-import {BibTeXDB, readBibTeX} from "./bibtex"
+import {BibTeXDB, diffBibTeX, readBibTeX} from "./bibtex"
 import _ from "lodash"
 import {NotionClient, NotionClientDebugLogger} from "@jitl/notion-api"
 
@@ -15,8 +15,14 @@ const baseFlags = {
   token: Flags.string({
     char: `t`,
     env: `NOTION_INTEGRATION_TOKEN`,
-    description: `Your Notion Integration's Token.`,
+    description: `Your Notion Integration Token. (NOTE: If you specify an environment variable of 'NOTION_INTEGRATION_TOKEN', that may be used.)`,
     required: true,
+  }),
+  diff: Flags.file({
+    char: `d`,
+    description: `Your BibTeX file to diff against.`,
+    required: false,
+    exists: true,
   }),
 }
 export type BaseFlagTypes = typeof baseFlags
@@ -49,6 +55,12 @@ abstract class BaseCommand extends Command {
   static examples: string[] = [
     "<%= config.bin %> <%= command.id %> /path/to/references.bib",
     "<%= config.bin %> <%= command.id %> /path/to/references.bib -c /path/to/paperpile-notion.config.js",
+    "<%= config.bin %> <%= command.id %> /path/to/references.bib -t <your-integration-token>",
+    "<%= config.bin %> <%= command.id %> /path/to/references.bib -t <your-integration-token> -c /path/to/paperpile-notion.config.js",
+    "<%= config.bin %> <%= command.id %> /path/to/references.bib",
+    "<%= config.bin %> <%= command.id %> /path/to/references.bib -d /path/to/your/previous/references.bib",
+    "<%= config.bin %> <%= command.id %> /path/to/references.bib -d /path/to/your/previous/references.bib -t <your-integration-token>",
+    "<%= config.bin %> <%= command.id %> /path/to/references.bib -d /path/to/your/previous/references.bib -t <your-integration-token> -c /path/to/paperpile-notion.config.js",
   ]
 
   protected appConfig!: StrictConfig
@@ -69,7 +81,15 @@ abstract class BaseCommand extends Command {
 
     this.appConfig = await loadConfig(this.config.configDir, flags?.config, this.notion)
 
-    this.BibTeX = readBibTeX(args.bibtexPath)
+    let bibtex: BibTeXDB
+    const currBibTeX: BibTeXDB = readBibTeX(args.bibtexPath)
+    if (flags.diff) {
+      const prevBibTeX: BibTeXDB = readBibTeX(flags.diff)
+      bibtex = diffBibTeX(prevBibTeX, currBibTeX)
+    } else {
+      bibtex = currBibTeX
+    }
+    this.BibTeX = bibtex
     this.BibTeXAuthors = _.chain(this.BibTeX).values().flatMap((o) => o.authors).uniq().filter().value()
 
     await super.init()

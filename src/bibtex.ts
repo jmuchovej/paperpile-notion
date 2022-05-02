@@ -9,19 +9,19 @@ const parseKeywords = (keywords: string[] | undefined) => {
     return {keywords: []}
   }
 
-  let status = _.find(keywords, (k: string) => k.startsWith(`status:`))
+  let status: string = keywords.find((k: string) => k.startsWith(`status:`))
   keywords = keywords.filter((k: string) => k.startsWith("status:"))
   status = status?.replace(/status:/, ``)
 
-  let topics = keywords.filter((k: string) => k.startsWith(`topic:`))
+  let topics: string[] = keywords.filter((k: string) => k.startsWith(`topic:`))
   keywords = keywords.filter((k: string) => !topics.includes(k))
   topics = topics?.map((t: string) => t.replace(/topic:/, ``))
 
-  let fields = keywords.filter((k: string) => k.startsWith(`field:`))
+  let fields: string[] = keywords.filter((k: string) => k.startsWith(`field:`))
   keywords = keywords.filter((k: string) => !fields.includes(k))
   fields = fields?.map((t: string) => t.replace(/field:/, ``))
 
-  let methods = keywords.filter((k: string) => k.startsWith(`method:`))
+  let methods: string[] = keywords.filter((k: string) => k.startsWith(`method:`))
   keywords = keywords.filter((k: string) => !methods.includes(k))
   methods = methods?.map((t: string) => t.replace(/method:/, ``))
 
@@ -61,6 +61,19 @@ export const readBibTeX = (path: string) => {
 
     return obj
   }, entries)
+}
+
+export const diffBibTeX = (prev: BibTeXDB, curr: BibTeXDB): BibTeXDB => {
+  return _.keys(curr).map((key: string) => {
+    if (!prev[key]) { // New BibTeX entry
+      return key
+    } else if (!_.isEqual(prev[key], curr[key])) { // Updated BibTeX entry
+      return key
+    }
+  }).filter(k => k).reduce((obj: BibTeXDB, key: string) => {
+    obj[key] = curr[key]
+    return obj
+  }, {})
 }
 
 const truncate = (str: string, maxlen: number = 100) => {
