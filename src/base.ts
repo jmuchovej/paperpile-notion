@@ -83,9 +83,11 @@ abstract class BaseCommand extends Command {
 
     let bibtex: BibTeXDB
     const currBibTeX: BibTeXDB = readBibTeX(args.bibtexPath)
+    console.log(`Found ${_.keys(currBibTeX).length} entries`)
     if (flags.diff) {
       const prevBibTeX: BibTeXDB = readBibTeX(flags.diff)
       bibtex = diffBibTeX(prevBibTeX, currBibTeX)
+      console.log(`Reduced to ${_.keys(bibtex).length} entries`)
     } else {
       bibtex = currBibTeX
     }

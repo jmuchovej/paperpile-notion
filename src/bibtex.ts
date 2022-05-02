@@ -45,7 +45,10 @@ export const readBibTeX = (path: string) => {
     citation = {...citation, ...parseKeywords(citation.keyword)}
     const authors = citation.author ? citation.author : citation.editor
     citation.authors = authors?.map(({family, given}: any) => {
-      return [given, family].filter(e => e).join(" ").replaceAll(/[.*]/g, "")
+      return [given, family]
+        .filter(e => e)
+        .join(" ")
+        .replaceAll(/[.*]/g, "")
     })
 
     // Notion doesn't allow Selects to be longer than 100 characters
@@ -65,9 +68,21 @@ export const readBibTeX = (path: string) => {
 
 export const diffBibTeX = (prev: BibTeXDB, curr: BibTeXDB): BibTeXDB => {
   return _.keys(curr).map((key: string) => {
-    if (!prev[key]) { // New BibTeX entry
+    // Short-circuit if this `key` is new
+    if (!prev[key]) {
+      console.log(`Found new entry at key: ${key}`)
       return key
-    } else if (!_.isEqual(prev[key], curr[key])) { // Updated BibTeX entry
+    }
+
+    // The graph needs to be dropped since BibTeX ordering isn't preserved
+    //   between Paperpile exports.
+    const prevBibTeX = _.omit(prev[key], "_graph")
+    const currBibTeX = _.omit(curr[key], "_graph")
+
+    // Perform a deep comparison across objects to determine if they're
+    //   different
+    if (!_.isEqual(prevBibTeX, currBibTeX)) {
+      console.log(`Entries differ at key: ${key}`)
       return key
     }
   }).filter(k => k).reduce((obj: BibTeXDB, key: string) => {
