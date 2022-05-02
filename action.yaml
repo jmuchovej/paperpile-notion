@@ -11,10 +11,10 @@ inputs:
     description: "The path to your BibTeX containing the desired entries to sync"
     required: true
   token:
-    description: "Your Notion Integration Token."
+    description: "Your Notion Integration Token"
     required: true
   references-diff:
-    description: "Sync `diff`s instead of running a full-sync everytime Paperpile syncs your changes."
+    description: "The path to your BibTeX to `diff` against"
     required: false
 
 runs:
@@ -44,34 +44,28 @@ runs:
       env:
         DEBUG: "@jitl/notion-api:cms:cache,@jtil/notion-api:children,@jitl/notion-api:iterate"
       run: |
-        if [ -z "${{ inputs.references-diff }}" ]; then
-          paperpile-notion authors:sync ${{ inputs.references }} -t ${{ inputs.token }}
-        else
-          paperpile-notion authors:sync ${{ inputs.references }} -t ${{ inputs.token }} -d ${{ inputs.references-diff }}
-        fi
+        paperpile-notion authors:sync ${{ inputs.references }} ${{ inputs.references-diff }} -t ${{ inputs.token }}
 
     - name: "Sync Article's Database"
       shell: "bash"
       env:
         DEBUG: "@jitl/notion-api:cms:cache,@jtil/notion-api:children,@jitl/notion-api:iterate"
       run: |
-        if [ -z "${{ inputs.references-diff }}" ]; then
-          paperpile-notion articles:sync ${{ inputs.references }} -t ${{ inputs.token }}
-        else
-          paperpile-notion articles:sync ${{ inputs.references }} -t ${{ inputs.token }} -d ${{ inputs.references-diff }}
-        fi
+        paperpile-notion articles:sync ${{ inputs.references }} ${{ inputs.references-diff }} -t ${{ inputs.token }}
 
     - name: "Clean Author's Database"
       shell: "bash"
       env:
         DEBUG: "@jitl/notion-api:cms:cache,@jtil/notion-api:children,@jitl/notion-api:iterate"
-      run: "paperpile-notion authors:clean ${{ inputs.references }} -t ${{ inputs.token }}"
+      run: |
+        paperpile-notion authors:clean ${{ inputs.references }} -t ${{ inputs.token }}
 
     - name: "Clean Article's Database"
       shell: "bash"
       env:
         DEBUG: "@jitl/notion-api:cms:cache,@jtil/notion-api:children,@jitl/notion-api:iterate"
-      run: "paperpile-notion articles:clean ${{ inputs.references }} -t ${{ inputs.token }}"
+      run: |
+        paperpile-notion articles:clean ${{ inputs.references }} -t ${{ inputs.token }}
 
     - if: always()
       name: "Upload `paperpile-notion` cache as Artifact"
