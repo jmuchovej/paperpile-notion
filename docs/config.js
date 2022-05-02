@@ -1,10 +1,10 @@
 const databases = {
   authors: {
-    databaseID: "1234567890abcdef1234567890abcdef",
+    databaseID: "1234567890abcdef1234567890abcdef", // or... "Authors"
     articleRef: "Articles",
   },
   articles: {
-    databaseID: "abcdef1234567890abcdef1234567890",
+    databaseID: "abcdef1234567890abcdef1234567890", // or... "Articles"
     authorRef: "Authors",
   },
 }
@@ -44,6 +44,12 @@ const methods = {
   },
 }
 
+const folders = {
+  prefix: "folders:",
+  colname: "Folders",
+  folders: {},
+}
+
 const icons = {
   book: ":books:",
   "article-journal": ":blue_book:",
@@ -53,5 +59,5 @@ const icons = {
 }
 
 module.exports = {
-  databases, status, topics, fields, methods, icons,
+  databases, status, topics, fields, methods, folders, icons,
 }
