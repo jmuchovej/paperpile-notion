@@ -13,6 +13,9 @@ inputs:
   token:
     description: "Your Notion Integration Token."
     required: true
+  references-diff:
+    description: "Sync `diff`s instead of running a full-sync everytime Paperpile syncs your changes."
+    required: false
 
 runs:
   using: "composite"
@@ -40,13 +43,23 @@ runs:
       shell: "bash"
       env:
         DEBUG: "@jitl/notion-api:cms:cache,@jtil/notion-api:children,@jitl/notion-api:iterate"
-      run: "paperpile-notion authors:sync ${{ inputs.references }} -t ${{ inputs.token }}"
+      run: |
+        if [ -z "${{ inputs.references-diff }}" ]; then
+          paperpile-notion authors:sync ${{ inputs.references }} -t ${{ inputs.token }}
+        else
+          paperpile-notion authors:sync ${{ inputs.references }} -t ${{ inputs.token }} -d ${{ inputs.references-diff }}
+        fi
 
     - name: "Sync Article's Database"
       shell: "bash"
       env:
         DEBUG: "@jitl/notion-api:cms:cache,@jtil/notion-api:children,@jitl/notion-api:iterate"
-      run: "paperpile-notion articles:sync ${{ inputs.references }} -t ${{ inputs.token }}"
+      run: |
+        if [ -z "${{ inputs.references-diff }}" ]; then
+          paperpile-notion articles:sync ${{ inputs.references }} -t ${{ inputs.token }}
+        else
+          paperpile-notion articles:sync ${{ inputs.references }} -t ${{ inputs.token }} -d ${{ inputs.references-diff }}
+        fi
 
     - name: "Clean Author's Database"
       shell: "bash"
