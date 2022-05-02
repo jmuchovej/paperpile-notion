@@ -3,6 +3,8 @@ name: "Sync `config.js` to Template Repository"
 on:
   workflow_dispatch: { }
   push:
+    branches:
+      - main
     paths:
       - docs/config.js
       - docs/sync.yaml
