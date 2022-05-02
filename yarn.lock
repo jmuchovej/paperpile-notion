@@ -299,7 +299,7 @@
 
 "@jitl/notion-api@0.2.1":
   version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@jitl/notion-api/-/notion-api-0.2.1.tgz#f00de2c238dddfab63e81ada71625d671f490d23"
+  resolved "https://registry.npmjs.org/@jitl/notion-api/-/notion-api-0.2.1.tgz"
   integrity sha512-R0H5hz/dCistR7vWOXmoddU1UiFRCErp5Wf7C/E+zlO01PJyJ+NMQuQyoEkpiE7oX6qOalKgnKf8+IGR82VLZA==
   dependencies:
     "@jitl/util" "0.0.3"
@@ -313,7 +313,7 @@
 
 "@jitl/util@0.0.3":
   version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@jitl/util/-/util-0.0.3.tgz#ef43903768c16200fcf4c0c9d4a79e5b9cb264f3"
+  resolved "https://registry.npmjs.org/@jitl/util/-/util-0.0.3.tgz"
   integrity sha512-C7WAt4ROaPS9wL8Sxlen0KP9i/Z917rpModwkQBfNZUp61Be88CZx7T1hz7oG7nev9f2J+Ze2wDdQyS5uk+d8w==
 
 "@nodelib/fs.scandir@2.1.5":
@@ -783,7 +783,7 @@
 
 "@types/debug@^4.1.7":
   version "4.1.7"
-  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.7.tgz#7cc0ea761509124709b8b2d1090d8f6c17aadb82"
+  resolved "https://registry.npmjs.org/@types/debug/-/debug-4.1.7.tgz"
   integrity sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==
   dependencies:
     "@types/ms" "*"
@@ -818,7 +818,7 @@
 
 "@types/mime-types@^2.1.1":
   version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@types/mime-types/-/mime-types-2.1.1.tgz#d9ba43490fa3a3df958759adf69396c3532cf2c1"
+  resolved "https://registry.npmjs.org/@types/mime-types/-/mime-types-2.1.1.tgz"
   integrity sha512-vXOTGVSLR2jMw440moWTC7H19iUyLtP3Z1YTj7cSsubOICinjMxFeb/V57v9QdyyPGbbWolUFSSmSiRSn94tFw==
 
 "@types/minimatch@*", "@types/minimatch@^3.0.3":
@@ -833,7 +833,7 @@
 
 "@types/ms@*":
   version "0.7.31"
-  resolved "https://registry.yarnpkg.com/@types/ms/-/ms-0.7.31.tgz#31b7ca6407128a3d2bbc27fe2d21b345397f6197"
+  resolved "https://registry.npmjs.org/@types/ms/-/ms-0.7.31.tgz"
   integrity sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==
 
 "@types/node-fetch@^2.5.10":
@@ -1735,7 +1735,7 @@ dateformat@^4.5.0:
 
 debug@4, debug@^4.3.2, debug@^4.3.3:
   version "4.3.4"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
+  resolved "https://registry.npmjs.org/debug/-/debug-4.3.4.tgz"
   integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
   dependencies:
     ms "2.1.2"
@@ -1864,7 +1864,7 @@ emoji-regex@^8.0.0:
 
 emoji-unicode@^2.0.1:
   version "2.0.1"
-  resolved "https://registry.yarnpkg.com/emoji-unicode/-/emoji-unicode-2.0.1.tgz#37b05f0cd20254fd366d1df4442b5c613a3a021a"
+  resolved "https://registry.npmjs.org/emoji-unicode/-/emoji-unicode-2.0.1.tgz"
   integrity sha512-jjswgV5nR3KDqtC9ugzEOYQaBLLQP5hqaH2tiTBaq9maYpMnmvl9T+ogY3u2bN6O5NAP0Ddh9D+Meo7sfW/1uw==
 
 encoding@^0.1.12, encoding@^0.1.13:
@@ -2279,7 +2279,7 @@ fast-levenshtein@^3.0.0:
 
 fast-safe-stringify@^2.1.1:
   version "2.1.1"
-  resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.1.1.tgz#c406a83b6e70d9e35ce3b30a81141df30aeba884"
+  resolved "https://registry.npmjs.org/fast-safe-stringify/-/fast-safe-stringify-2.1.1.tgz"
   integrity sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==
 
 fastest-levenshtein@^1.0.7:
@@ -3308,7 +3308,7 @@ micromatch@^4.0.2, micromatch@^4.0.4:
 
 mime-db@1.52.0:
   version "1.52.0"
-  resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.52.0.tgz#bbabcdc02859f4987301c856e3387ce5ec43bf70"
+  resolved "https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz"
   integrity sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==
 
 mime-types@^2.1.12, mime-types@^2.1.34:
@@ -3476,7 +3476,7 @@ moo@^0.5.1:
 
 ms@2.1.2:
   version "2.1.2"
-  resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
+  resolved "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
 ms@2.1.3, ms@^2.0.0:
@@ -3542,7 +3542,7 @@ nock@^13.0.0:
 
 node-emoji@^1.11.0:
   version "1.11.0"
-  resolved "https://registry.yarnpkg.com/node-emoji/-/node-emoji-1.11.0.tgz#69a0150e6946e2f115e9d7ea4df7971e2628301c"
+  resolved "https://registry.npmjs.org/node-emoji/-/node-emoji-1.11.0.tgz"
   integrity sha512-wo2DpQkQp7Sjm2A0cq+sN7EHKO6Sl0ctXeBdFZrL9T9+UywORbufTcTZxom8YqpLQt/FqNMUkOpkZrJVYSKD3A==
   dependencies:
     lodash "^4.17.21"
@@ -3718,7 +3718,7 @@ object-treeify@^1.1.33, object-treeify@^1.1.4:
 
 oclif@3.0.0:
   version "3.0.0"
-  resolved "https://registry.yarnpkg.com/oclif/-/oclif-3.0.0.tgz#f4dd8e5117fa6924a4294a2aeed58e670d4244eb"
+  resolved "https://registry.npmjs.org/oclif/-/oclif-3.0.0.tgz"
   integrity sha512-NNtIC8DE6Ln9I2pFcR/Y+1PjRQyd7DJW3Uc9jxGipefph/WMWHFxW/EYjGDzdtj8ivrgq398q26/8DklBSTbHw==
   dependencies:
     "@oclif/core" "^1.6.4"
@@ -4525,11 +4525,6 @@ stdout-stderr@^0.1.9:
   dependencies:
     debug "^4.1.1"
     strip-ansi "^6.0.0"
-
-string-similarity@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.npmjs.org/string-similarity/-/string-similarity-4.0.4.tgz"
-  integrity sha512-/q/8Q4Bl4ZKAPjj8WerIBJWALKkaPRfrvhfF8k/B23i4nzrlRj2/go1m90In7nG/3XDSbOo0+pu6RvCTM9RGMQ==
 
 string-width@^1.0.1:
   version "1.0.2"
