@@ -1,0 +1,67 @@
+name: "Sync Paperpile to Notion"
+
+on:
+  workflow_dispatch: { }
+  workflow_call:
+    inputs:
+      references:
+        description: "The path to your BibTeX containing the desired entries to sync"
+        required: true
+    secrets:
+      token:
+        description: "Your Notion Integration Token"
+        required: true
+  push:
+    paths:
+      - "**.bib"
+
+jobs:
+  sync-to-notion:
+    name: "Sync Paperpile to Notion"
+
+    runs-on: "ubuntu-latest"
+
+    concurrency:
+      group: "paperpile-notion-clean"
+      cancel-in-progress: false
+
+    steps:
+      - name: "Install `paperpile-notion`"
+        shell: "bash"
+        run: "npm install -g @jmuchovej/paperpile-notion"
+
+      - name: "Checkout repository"
+        uses: "actions/checkout@v3"
+
+      - continue-on-error: true
+        name: "Download the clean-up cache"
+        uses: "dawidd6/action-download-artifact@v2"
+        with:
+          workflow: "clean-up.yaml"
+          name: "paperpile-notion-cache:clean-up"
+          path: ".cache/paperpile-notion"
+          search_artifacts: true
+
+      - name: "Sync local `{.config,.cache}` with `~/{.config,.cache}`"
+        shell: "bash"
+        run: |
+          [ -d "$(pwd)/.cache" ] && rsync -a $(pwd)/.cache ${HOME}/
+          [ -d "$(pwd)/.config" ] && rsync -a $(pwd)/.config ${HOME}/
+
+      - name: "Clean Author's Database"
+        shell: "bash"
+        run: |
+          paperpile-notion authors:clean ${{ inputs.references }} -t ${{ inputs.token }}
+
+      - name: "Clean Article's Database"
+        shell: "bash"
+        run: |
+          paperpile-notion articles:clean ${{ inputs.references }} -t ${{ inputs.token }}
+
+      - if: always()
+        name: "Upload the clean-up cache"
+        uses: "actions/upload-artifact@v3"
+        with:
+          name: "paperpile-notion-cache:clean-up"
+          path: "~/.cache/paperpile-notion/*.json"
+          retention-days: 90

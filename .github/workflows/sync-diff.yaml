@@ -1,0 +1,70 @@
+name: "Sync Paperpile Diff to Notion"
+
+on:
+  workflow_dispatch: { }
+  workflow_call:
+    inputs:
+      references:
+        description: "The path to your BibTeX containing the desired entries to sync."
+        required: true
+      references-diff:
+        description: "The path to the BibTeX to diff your references against."
+        required: true
+    secrets:
+      token:
+        description: "Your Notion Integration Token"
+        required: true
+  push:
+    paths:
+      - "**.bib"
+
+jobs:
+  sync-to-notion:
+    name: "Sync your Paperpile diff to Notion"
+
+    runs-on: "ubuntu-latest"
+
+    concurrency:
+      group: "paperpile-notion-diff"
+      cancel-in-progress: false
+
+    steps:
+      - name: "Install `paperpile-notion`"
+        shell: "bash"
+        run: "npm install -g @jmuchovej/paperpile-notion"
+
+      - name: "Checkout repository"
+        uses: "actions/checkout@v3"
+
+      - continue-on-error: true
+        name: "Download the diff cache"
+        uses: "dawidd6/action-download-artifact@v2"
+        with:
+          workflow: "sync-diff.yaml"
+          name: "paperpile-notion-cache:sync-diff"
+          path: ".cache/paperpile-notion"
+          search_artifacts: true
+
+      - name: "Sync local `{.config,.cache}` with `~/{.config,.cache}`"
+        shell: "bash"
+        run: |
+          [ -d "$(pwd)/.cache" ] && rsync -a $(pwd)/.cache ${HOME}/
+          [ -d "$(pwd)/.config" ] && rsync -a $(pwd)/.config ${HOME}/
+
+      - name: "Sync the Author diff to the Author's database"
+        shell: "bash"
+        run: |
+          paperpile-notion authors:sync ${{ inputs.references }} ${{ inputs.references-diff }} -t ${{ inputs.token }}
+
+      - name: "Sync the Article diff to the Article's database"
+        shell: "bash"
+        run: |
+          paperpile-notion articles:sync ${{ inputs.references }} ${{ inputs.references-diff }} -t ${{ inputs.token }}
+
+      - if: always()
+        name: "Upload the clean-up cache"
+        uses: "actions/upload-artifact@v3"
+        with:
+          name: "paperpile-notion-cache:sync-diff"
+          path: "~/.cache/paperpile-notion/*.json"
+          retention-days: 90
