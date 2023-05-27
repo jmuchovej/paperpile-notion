@@ -26,7 +26,7 @@
       ]
     },
     "authors": {
-      "$ref": "#/definitions/articles"
+      "$ref": "#/properties/articles"
     },
     "status": {
       "type": "object",
@@ -43,16 +43,16 @@
       "required": ["prefix", "colname"]
     },
     "topics": {
-      "$ref": "#/definitions/status"
+      "$ref": "#/properties/status"
     },
     "fields": {
-      "$ref": "#/definitions/status"
+      "$ref": "#/properties/status"
     },
     "methods": {
-      "$ref": "#/definitions/status"
+      "$ref": "#/properties/status"
     },
     "folders": {
-      "$ref": "#/definitions/status"
+      "$ref": "#/properties/status"
     },
     "icons": {
       "type": "object",
