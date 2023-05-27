@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "articles": {
+      "type": "object",
+      "anyOf": [
+        {
+          "properties": {
+            "databaseID": {
+              "oneOf": [
+                {"type": "string", "minLength": 32, "maxLength": 32},
+                {"type": "string", "format": "uuid"}
+              ],
+              "description": "The ID of your database. To retrieve it, go to your database, \"Copy Link\", copy the `<databaseID>` from \"https://notion.so/<your-username>/<databaseID>?<other-URL-components>\"."
+            }
+          },
+          "required": ["databaseID"]
+        },
+        {
+          "properties": {
+            "databaseName": { "type": "string" }
+          },
+          "required": ["databaseName"]
+        }
+      ]
+    },
+    "authors": {
+      "$ref": "#/definitions/articles"
+    },
+    "status": {
+      "type": "object",
+      "properties": {
+        "prefix": { "type": "string" },
+        "colname": { "type": "string" },
+        "mapping": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["prefix", "colname"]
+    },
+    "topics": {
+      "$ref": "#/definitions/status"
+    },
+    "fields": {
+      "$ref": "#/definitions/status"
+    },
+    "methods": {
+      "$ref": "#/definitions/status"
+    },
+    "folders": {
+      "$ref": "#/definitions/status"
+    },
+    "icons": {
+      "type": "object",
+      "properties": {
+        "book": { "type": "string" },
+        "article-journal": { "type": "string" },
+        "inproceedings": { "type": "string" },
+        "paper-conference": { "type": "string" },
+        "proceedings": { "type": "string" }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["articles"]
+}
